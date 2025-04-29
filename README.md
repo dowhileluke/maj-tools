@@ -1,0 +1,2 @@
+# maj-tools
+Mahjong Tools
