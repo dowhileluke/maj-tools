@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@layer utilities {
+	.h-screen {
+		height: 100vh;
+		height: -webkit-fill-available;
+	}
+}
+
+@custom-variant landscape (@media (min-width: 600px) and (max-height: 550px));
+
+@utility pb-inset-* {
+	padding-bottom: max(calc(var(--spacing) * --value(integer)), env(safe-area-inset-bottom));
+}
