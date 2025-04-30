@@ -18,7 +18,7 @@ export function FuTable() {
 				{FU_LIST.map(fu => (
 					<div key={fu} className={colStyle}>
 						<Cell short bordered>
-							<span className="font-bold">{fu} fu</span>
+							<span>{fu} fu</span>
 							{notes[fu] && (<Note>{notes[fu]}</Note>)}
 						</Cell>
 						{HAN_LIST.map(han => (
