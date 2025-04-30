@@ -3,18 +3,18 @@ import { concat } from '../functions/concat'
 
 type CellProps = ComponentProps<'div'> & {
 	short?: boolean;
-	bordered?: boolean;
+	borders?: string;
 }
 
-const cellStyle = 'w-full flex flex-col gap-1 justify-center items-center'
+const cellStyle = 'w-full flex flex-col justify-center items-center'
+const cellBorderStyle = 'border-b border-r'
 
-export function Cell({ short = false, bordered = false, className, ...props }: CellProps) {
-	const heightStyle = short ? 'h-10' : 'h-12'
-	const borderStyle = concat('border-t border-l last:border-b', !bordered && 'first:border-none')
+export function Cell({ short = false, borders, className, ...props }: CellProps) {
+	const heightStyle = short ? 'gap-1 h-10' : 'gap-2 h-12'
 
 	return (
 		<div
-			className={concat(cellStyle, heightStyle, borderStyle, className)}
+			className={concat(cellStyle, borders || cellBorderStyle, heightStyle, className)}
 			{...props}
 		/>
 	)

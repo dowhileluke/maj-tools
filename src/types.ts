@@ -6,5 +6,12 @@ export type LimitHand = {
 
 export type AppState = {
 	isDealer: boolean;
+	isDelta: boolean;
 	repeatCount: number;
+}
+
+export type AppActions = {
+	setIsDealer: (isDealer: boolean) => void;
+	setIsDelta: (isDelta: boolean) => void;
+	setRepeatCount: (repeatCount: number) => void;
 }
