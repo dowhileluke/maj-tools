@@ -14,7 +14,7 @@ const notes: Record<number, string> = {
 export function FuTable() {
 	return (
 		<BorderBox>
-			<div className="flex w-72 overflow-auto bg-linear-to-r from-transparent to-mangan snap-x">
+			<div className="flex w-72 overflow-auto no-scrollbar bg-linear-to-r from-transparent to-mangan snap-x">
 				{FU_LIST.map(fu => (
 					<div key={fu} className={colStyle}>
 						<Cell short bordered>

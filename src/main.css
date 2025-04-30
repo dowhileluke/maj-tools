@@ -20,3 +20,7 @@
 @utility pb-inset-* {
 	padding-bottom: max(calc(var(--spacing) * --value(integer)), env(safe-area-inset-bottom));
 }
+
+@utility no-scrollbar {
+	@apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
