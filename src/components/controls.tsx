@@ -1,3 +1,4 @@
+import { Lightbulb } from '@phosphor-icons/react'
 import { useAppState } from '../hooks/use-app-state'
 import { FlexLabel } from './flex-label'
 import { Toggle } from './toggle'
@@ -10,9 +11,11 @@ export function Controls() {
 
 	return (
 		<div className="flex gap-8">
-		<FlexLabel title="Light Mode">
-			<Toggle checked={state.isLightMode} onChange={actions.setIsLightMode} />
-		</FlexLabel>
+			<FlexLabel title="Light Mode">
+				<Toggle checked={state.isLightMode} onChange={actions.setIsLightMode}>
+					<Lightbulb size="1em" className={iconStyle} />
+				</Toggle>
+			</FlexLabel>
 			<FlexLabel title="Relative">
 				<Toggle checked={state.isDelta} onChange={actions.setIsDelta} />
 			</FlexLabel>
