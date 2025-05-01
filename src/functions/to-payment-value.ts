@@ -9,10 +9,10 @@ function toDelta(n: number) {
 	return '+' + n
 }
 
-export function toPaymentValue(baseValue: number, isDealer: boolean, isDelta: boolean) {
-	const dealerTsumo = toRoundedValue(baseValue * 2)
+export function toPaymentValue(baseValue: number, isDealer: boolean, isDelta: boolean, repeatCount: number) {
+	const dealerTsumo = toRoundedValue(baseValue * 2) + (100 * repeatCount)
 	const ronMult = isDealer ? 6 : 4
-	const baseRon = toRoundedValue(ronMult * baseValue)
+	const baseRon = toRoundedValue(ronMult * baseValue) + (300 * repeatCount)
 	const ron = isDelta ? toDelta(baseRon * 2) : baseRon
 
 	if (isDealer) {
@@ -24,7 +24,7 @@ export function toPaymentValue(baseValue: number, isDealer: boolean, isDelta: bo
 		return result
 	}
 
-	const baseTsumo = toRoundedValue(baseValue)
+	const baseTsumo = toRoundedValue(baseValue) + (100 * repeatCount)
 	const tsumoSum = (baseTsumo * 2) + dealerTsumo
 
 	const result: PaymentValue = {

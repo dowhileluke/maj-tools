@@ -13,7 +13,7 @@ type ValueCellProps = {
 const leadingStyle = 'leading-[1rem]'
 
 export function ValueCell({ han, fu }: ValueCellProps) {
-	const [{ isDealer, isDelta }] = useAppState()
+	const [{ isDealer, isDelta, repeatCount }] = useAppState()
 	let baseValue = fu ? toBaseValue(han, fu) : LIMIT_HANDS[han].baseValue
 	const isMangan = fu ? (baseValue >= KIRIAGE_BASE_VALUE) : (baseValue === MANGAN_BASE_VALUE)
 
@@ -27,7 +27,7 @@ export function ValueCell({ han, fu }: ValueCellProps) {
 		<Cell className={cellStyle} borders={isMangan ? 'border-none' : ''} />
 	)
 
-	const payment = toPaymentValue(baseValue, isDealer, isDelta)
+	const payment = toPaymentValue(baseValue, isDealer, isDelta, repeatCount)
 	const isWide = fu > 0 && !isDealer && isDelta
 
 	return (

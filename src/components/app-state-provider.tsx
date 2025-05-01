@@ -7,6 +7,7 @@ const initialState: AppState = {
 	isDealer: false,
 	isDelta: false,
 	isLightMode: false,
+	isMenuOpen: false,
 	repeatCount: 0,
 }
 
@@ -20,6 +21,9 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 		},
 		setIsLightMode(isLightMode) {
 			setState(prev => ({ ...prev, isLightMode, }))
+		},
+		setIsMenuOpen(isMenuOpen) {
+			setState(prev => ({ ...prev, isMenuOpen, }))
 		},
 		setRepeatCount(repeatCount) {
 			setState(prev => ({ ...prev, repeatCount, }))
