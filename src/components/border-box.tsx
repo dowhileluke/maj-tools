@@ -7,6 +7,7 @@ export function BorderBox({ className, children, ...props }: ComponentProps<'div
 			{children}
 			<div className="absolute top-0 left-0 h-full border-l" />
 			<div className="absolute top-0 right-0 h-full border-l" />
+			<div className="absolute bottom-0 w-full landscape:border-t" />
 		</div>
 	)
 }

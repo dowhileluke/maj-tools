@@ -29,10 +29,14 @@ export function ScoreTable() {
 				<div className="w-20">
 					{LIMIT_HANDS.map(({ han, name, baseValue }) => (
 						<Cell key={han} borders={labelBorder} className={baseValue === MANGAN_BASE_VALUE ? 'bg-mangan' : ''}>
-							{han === 'Y' ? '★' : `${han} han`}
-							<Note>
-								{name}
-							</Note>
+							{han === 'Y' ? name : (
+								<>
+									{han} han
+									<Note>
+										{name}
+									</Note>
+								</>
+							)}
 						</Cell>
 					))}
 				</div>

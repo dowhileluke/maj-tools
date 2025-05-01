@@ -7,11 +7,13 @@ export type LimitHand = {
 export type AppState = {
 	isDealer: boolean;
 	isDelta: boolean;
+	isLightMode: boolean;
 	repeatCount: number;
 }
 
 export type AppActions = {
 	setIsDealer: (isDealer: boolean) => void;
 	setIsDelta: (isDelta: boolean) => void;
+	setIsLightMode: (isLightMode: boolean) => void;
 	setRepeatCount: (repeatCount: number) => void;
 }

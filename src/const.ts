@@ -1,6 +1,8 @@
 import { generateArray } from '@dowhileluke/fns'
 import { LimitHand } from './types'
 
+export const BG_HEX_CODE = '#262626' // also hard-coded in `vite.config.ts` 
+
 export const HAN_LIST = generateArray(1, 4)
 export const FU_LIST = [20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110]
 export const MAX_INDEX = FU_LIST.length - 3

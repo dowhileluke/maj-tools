@@ -15,8 +15,8 @@ export default defineConfig({
         name: 'MajTools',
         short_name: 'MajTools',
         description: 'Mahjong Tools',
-        theme_color: 'white',
-        background_color: 'white',
+        theme_color: '#262626',
+        background_color: '#262626',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -32,7 +32,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: '/maj-score/',
+  base: '/maj-tools/',
   server: {
     host: true,
   },

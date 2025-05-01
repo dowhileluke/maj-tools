@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
+
 :root {
-  --mangan: var(--color-amber-100);
+	--fore: var(--color-white);
+	--back: var(--color-neutral-800);
+	--mangan: var(--color-sky-800);
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--mangan: var(--color-amber-800);
-	}
+:root.light {
+	--fore: var(--color-neutral-800);
+	--back: var(--color-white);
+  --mangan: var(--color-sky-100);
 }
 
 @theme {
