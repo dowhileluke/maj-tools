@@ -15,7 +15,7 @@ const leadingStyle = 'leading-[1rem]'
 export function ValueCell({ han, fu }: ValueCellProps) {
 	const [{ isDealer, isDelta }] = useAppState()
 	let baseValue = fu ? toBaseValue(han, fu) : LIMIT_HANDS[han].baseValue
-	let isMangan = fu ? (baseValue >= KIRIAGE_BASE_VALUE) : (baseValue === MANGAN_BASE_VALUE)
+	const isMangan = fu ? (baseValue >= KIRIAGE_BASE_VALUE) : (baseValue === MANGAN_BASE_VALUE)
 
 	if (fu > 0 && baseValue > MANGAN_BASE_VALUE) {
 		baseValue = 0
