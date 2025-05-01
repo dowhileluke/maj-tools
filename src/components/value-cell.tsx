@@ -4,7 +4,6 @@ import { concat } from '../functions/concat'
 import { KIRIAGE_BASE_VALUE, LIMIT_HANDS, MANGAN_BASE_VALUE } from '../const'
 import { useAppState } from '../hooks/use-app-state'
 import { toPaymentValue } from '../functions/to-payment-value'
-import { Note } from './note'
 
 type ValueCellProps = {
 	han: number;
