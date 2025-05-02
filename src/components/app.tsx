@@ -15,9 +15,14 @@ export function App() {
 			<Modal
 				open={isMenuOpen}
 				onClose={() => setIsMenuOpen(false)}
-				className="flex flex-col gap-8 landscape:flex-row"
+				className="flex flex-col justify-center items-center gap-8 landscape:flex-row"
 			>
-				<img src="./qr.png" className={concat(isLightMode && 'invert')} alt="QR code" />
+				<img
+					src="./qr.png"
+					width="232"
+					alt="QR code"
+					className={concat('pixelated', isLightMode && 'invert')}
+				/>
 				<MenuControls />
 			</Modal>
 		</div>

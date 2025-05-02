@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+	-webkit-text-size-adjust: 100%;
 	--fore: var(--color-white);
 	--back: var(--color-neutral-800);
 	--mangan: var(--color-sky-800);
@@ -31,4 +32,8 @@
 
 @utility no-scrollbar {
 	@apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+@utility pixelated {
+	image-rendering: pixelated;
 }
