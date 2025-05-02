@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { Gear } from '@phosphor-icons/react'
+import { List } from '@phosphor-icons/react'
 import { useAppState } from '../hooks/use-app-state'
 import { FlexLabel } from './flex-label'
 import { Toggle } from './toggle'
@@ -16,7 +16,7 @@ export function Controls() {
 	return (
 		<div className="flex gap-8 items-center">
 			<Button onClick={() => actions.setIsMenuOpen(true)}>
-				<Gear size="2em" weight="thin" />
+				<List size="2em" weight="thin" />
 			</Button>
 			<FlexLabel title="Relative">
 				<Toggle checked={state.isDelta} onChange={actions.setIsDelta} />
