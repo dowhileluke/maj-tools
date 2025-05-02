@@ -1,4 +1,4 @@
-import { ArrowSquareOut, Lightbulb, X } from '@phosphor-icons/react'
+import { ArrowSquareOut, Lightbulb } from '@phosphor-icons/react'
 import { useAppState } from '../hooks/use-app-state'
 import { FlexLabel } from './flex-label'
 import { Toggle } from './toggle'
