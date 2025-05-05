@@ -35,7 +35,7 @@ export function ValueCell({ han, fu }: ValueCellProps) {
 			<span className={leadingStyle}>
 				{fu === 20 ? '-' : payment.ron}
 			</span>
-			<span className={concat(isWide ? "text-xs" : "text-sm", leadingStyle)}>
+			<span className={concat(isWide ? "text-xs" : "text-sm landscape:text-xs", leadingStyle)}>
 				{fu === 25 && han === 2 ? '-' : payment.tsumo.join('/')}
 			</span>
 		</Cell>

@@ -42,7 +42,7 @@ export function ScoreTable() {
 				</div>
 
 				<BorderBox>
-					<div className="w-72">
+					<div className="w-72 landscape:w-24">
 						{LIMIT_HANDS.map(({ baseValue }, index) => (
 							<ValueCell key={baseValue} han={index} fu={0} />
 						))}

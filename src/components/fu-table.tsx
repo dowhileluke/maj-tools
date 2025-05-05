@@ -28,7 +28,7 @@ export function FuTable() {
 
 	return (
 		<BorderBox className="border-t">
-			<div className="flex w-72 overflow-auto snap-x no-scrollbar touch-pan-x">
+			<div className="flex w-72 landscape:w-120 overflow-auto snap-x no-scrollbar touch-pan-x">
 				{FU_LIST.map(fu => (
 					<div key={fu} className={colStyle} ref={refMap[fu]}>
 						<Cell short>
