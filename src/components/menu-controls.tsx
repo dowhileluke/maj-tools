@@ -13,7 +13,7 @@ export function MenuControls() {
 				<a
 					href="https://ko-fi.com/dowhileluke"
 					target="_blank"
-					className="h-7 px-2 py-1 border cursor-pointer rounded-full flex items-center gap-1 text-white bg-orange-600 border-(--fore)"
+					className="h-7 px-2 py-1 border cursor-pointer rounded-full flex items-center gap-1 text-white bg-orange-600 border-fore"
 				>
 					<img src="./kofi.png" alt="Ko-fi logo" className="h-full" />
 					on Ko-fi
