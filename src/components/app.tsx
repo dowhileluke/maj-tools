@@ -9,7 +9,7 @@ export function App() {
 	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
 
 	return (
-		<div className="h-screen flex flex-col gap-4 justify-center items-center">
+		<div className={concat('h-screen flex flex-col gap-4 justify-center items-center', isMenuOpen && 'blur sm')}>
 			<ScoreTable />
 			<Controls />
 			<Modal
