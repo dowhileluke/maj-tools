@@ -2,6 +2,7 @@ import { Dispatch, PropsWithChildren, SetStateAction, useEffect, useState } from
 import { AppActions, AppState } from '../types'
 import { AppContext } from '../context'
 import { BG_HEX_CODE } from '../const'
+import { getPersistedState, setPersistedState } from '../functions/persist'
 
 const initialState: AppState = {
 	isDealer: false,
@@ -9,6 +10,7 @@ const initialState: AppState = {
 	isLightMode: false,
 	isMenuOpen: false,
 	repeatCount: 0,
+	...getPersistedState(),
 }
 
 function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
@@ -36,14 +38,17 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 export function AppStateProvider({ children }: PropsWithChildren) {
 	const [state, setState] = useState(initialState)
 	const [actions] = useState(() => bindActions(setState))
+	const { isLightMode } = state
 
 	useEffect(() => {
-		document.documentElement.classList.toggle('light', state.isLightMode)
-	}, [state.isLightMode])
+		document.documentElement.classList.toggle('light', isLightMode)
+
+		setPersistedState({ isLightMode })
+	}, [isLightMode])
 
 	return (
 		<AppContext value={[state, actions]}>
-			<meta name="theme-color" content={state.isLightMode ? 'white' : BG_HEX_CODE} />
+			<meta name="theme-color" content={isLightMode ? 'white' : BG_HEX_CODE} />
 			{children}
 		</AppContext>
 	)
