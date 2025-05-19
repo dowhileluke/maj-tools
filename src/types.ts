@@ -2,6 +2,19 @@ export type LimitHand = {
 	name: string;
 	han: string;
 	baseValue: number;
+	key?: string;
+}
+
+export type PointCalculation = {
+	oyaRon: number;
+	koRon: number;
+	oyaTsumo: number;
+	koTsumo: number;
+	oyaGainsByRon: number;
+	oyaGainsByTsumo: number;
+	koGainsByRon: number;
+	koGainsVsOyaByTsumo: number;
+	koGainsVsKoByTsumo: number;
 }
 
 export type AppState = {
