@@ -1,11 +1,37 @@
+import { useState } from 'react'
 import { concat } from '../functions/concat'
 import { useAppState } from '../hooks/use-app-state'
+import { Compass } from './compass'
 import { Controls } from './controls'
 import { MenuControls } from './menu-controls'
 import { Modal } from './modal'
 import { ScoreTable } from './score-table'
+import { generateArray } from '@dowhileluke/fns'
+import { IntegerInput } from './integer-input'
+import { DualPanel } from './dual-panel'
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
+import { CompassRose, IconProps, List, Table } from '@phosphor-icons/react'
+import { Button } from './button'
 
-export function App() {
+export function App2() {
+	const [di, setDi] = useState<number | null>(0)
+
+	return (
+		<div className="compass gap-4">
+			{generateArray(4, n => (
+				<IntegerInput
+					key={n}
+					value={di}
+					onChange={setDi}
+					className="border rounded-sm text-center"
+				/>
+			))}
+			<Compass value={di || 0} onChange={setDi} />
+		</div>
+	)
+}
+
+export function App1() {
 	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
 
 	return (
@@ -26,5 +52,53 @@ export function App() {
 				<MenuControls />
 			</Modal>
 		</div>
+	)
+}
+
+const tabStyle = 'flex-center flex-col min-w-20 px-2 py-1 leading-none rounded-md outline-none data-[selected]:bg-back/60 condensed:p-1 condensed:min-w-auto'
+const iconProps: IconProps = { size: '1.5rem', weight: 'thin', }
+
+export function App() {
+	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
+
+	return (
+		<TabGroup as={DualPanel} expand="above" className={concat('h-screen', isMenuOpen && 'blur sm')}>
+			<TabPanels>
+				<TabPanel as={DualPanel} expand="above">
+					<ScoreTable />
+					<div>1b</div>
+				</TabPanel>
+				<TabPanel>
+					2
+				</TabPanel>
+			</TabPanels>
+			<TabList as="nav" className="bg-mangan text-sm p-1 pr-inset-1 pb-inset-1 gap-2 flex justify-center condensed:flex-col">
+				<Tab className={tabStyle}>
+					<Table {...iconProps} />
+					<span className="condensed:hidden">Payment</span>
+				</Tab>
+				<Tab className={tabStyle}>
+					<CompassRose {...iconProps} />
+					<span className="condensed:hidden">Compare</span>
+				</Tab>
+				<Button className={tabStyle} onClick={() => setIsMenuOpen(true)}>
+					<List {...iconProps} />
+					<span className="condensed:hidden">Menu</span>
+				</Button>
+			</TabList>
+			<Modal
+				open={isMenuOpen}
+				onClose={() => setIsMenuOpen(false)}
+				className="flex flex-col justify-center items-center gap-8 landscape:flex-row"
+			>
+				<img
+					src="./qr.png"
+					width="232"
+					alt="QR code"
+					className={concat('pixelated', isLightMode && 'invert')}
+				/>
+				<MenuControls />
+			</Modal>
+		</TabGroup>
 	)
 }
