@@ -27,11 +27,11 @@ export function ScoreTable() {
 
 			<div className="flex landscape:border-t">
 				<div className="w-20">
-					{LIMIT_HANDS.map(({ han, name, baseValue }) => (
-						<Cell key={han} borders={labelBorder} className={baseValue === MANGAN_BASE_VALUE ? 'bg-mangan' : ''}>
-							{han === 'Y' ? name : (
+					{LIMIT_HANDS.map(({ hanLabel, name, baseValue }) => (
+						<Cell key={hanLabel} borders={labelBorder} className={baseValue === MANGAN_BASE_VALUE ? 'bg-mangan' : ''}>
+							{hanLabel === 'Y' ? name : (
 								<>
-									{han} han
+									{hanLabel} han
 									<Note>
 										{name}
 									</Note>

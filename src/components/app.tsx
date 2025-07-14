@@ -1,35 +1,15 @@
-import { useState } from 'react'
 import { concat } from '../functions/concat'
 import { useAppState } from '../hooks/use-app-state'
-import { Compass } from './compass'
 import { Controls } from './controls'
 import { MenuControls } from './menu-controls'
 import { Modal } from './modal'
 import { ScoreTable } from './score-table'
-import { generateArray } from '@dowhileluke/fns'
-import { IntegerInput } from './integer-input'
 import { DualPanel } from './dual-panel'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { CompassRose, IconProps, List, Table } from '@phosphor-icons/react'
 import { Button } from './button'
-
-export function App2() {
-	const [di, setDi] = useState<number | null>(0)
-
-	return (
-		<div className="compass gap-4">
-			{generateArray(4, n => (
-				<IntegerInput
-					key={n}
-					value={di}
-					onChange={setDi}
-					className="border rounded-sm text-center"
-				/>
-			))}
-			<Compass value={di || 0} onChange={setDi} />
-		</div>
-	)
-}
+import { Comparison } from './comparison'
+import { Conditions } from './conditions'
 
 export function App1() {
 	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
@@ -62,14 +42,21 @@ export function App() {
 	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
 
 	return (
+		<div>
+			<Conditions />
+			<Comparison />
+		</div>
+	)
+
+	return (
 		<TabGroup as={DualPanel} expand="above" className={concat('h-screen', isMenuOpen && 'blur sm')}>
 			<TabPanels>
 				<TabPanel as={DualPanel} expand="above">
 					<ScoreTable />
-					<div>1b</div>
+					<Controls />
 				</TabPanel>
 				<TabPanel>
-					2
+					<Comparison />
 				</TabPanel>
 			</TabPanels>
 			<TabList as="nav" className="bg-mangan text-sm p-1 pr-inset-1 pb-inset-1 gap-2 flex justify-center condensed:flex-col">

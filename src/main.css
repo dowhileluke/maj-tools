@@ -32,6 +32,8 @@
 		& > :nth-child(3) { grid-area: t; }
 		& > :nth-child(4) { grid-area: l; }
 		& > :nth-child(5) { grid-area: c; }
+		& > :nth-child(6) { grid-area: bl; }
+		& > :nth-child(7) { grid-area: br; }
 	}
 
 	.flex-center {
