@@ -1,5 +1,7 @@
 import { RANK_LABELS } from './const'
 
+export type Replace<T, U> = Omit<T, keyof U> & U
+
 export type LimitHand = {
 	name: string;
 	han: number;

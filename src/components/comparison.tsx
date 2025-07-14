@@ -5,7 +5,7 @@ import { IntegerInput } from './integer-input'
 import { User, UserSwitch } from '@phosphor-icons/react'
 import { toRankedDeltas } from '../functions/to-ranked-deltas'
 import { RANK_LABELS } from '../const'
-import { RepeatCounter } from './repeat-counter'
+import { LeftoverCounter, RepeatCounter } from './counter'
 import { FlexLabel } from './flex-label'
 import { useId } from 'react'
 
@@ -19,7 +19,8 @@ function signed(n: number | null) {
 }
 
 export function Comparison() {
-	const id = useId()
+	const repeatId = useId()
+	const letftoverId = useId()
 	const [state, actions] = useAppState()
 	const rankedDeltas = toRankedDeltas(state.scores)
 
@@ -54,8 +55,11 @@ export function Comparison() {
 				</div>
 			))}
 			<Compass value={state.dealerIndex} onChange={actions.setDealerIndex} />
-			<FlexLabel title="Repeats" htmlFor={id}>
-				<RepeatCounter id={id} />
+			<FlexLabel title="Repeats" htmlFor={repeatId}>
+				<RepeatCounter id={repeatId} />
+			</FlexLabel>
+			<FlexLabel title="Leftovers" htmlFor={letftoverId}>
+				<LeftoverCounter id={letftoverId} />
 			</FlexLabel>
 		</div>
 	)

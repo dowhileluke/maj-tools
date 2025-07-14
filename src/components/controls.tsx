@@ -4,7 +4,7 @@ import { useAppState } from '../hooks/use-app-state'
 import { FlexLabel } from './flex-label'
 import { Toggle } from './toggle'
 import { Ton } from './ton'
-import { RepeatCounter } from './repeat-counter'
+import { RepeatCounter } from './counter'
 import { Button } from './button'
 
 export const iconStyle = 'transition duration-500 ease-in-out text-transparent group-data-checked:text-(--back)'
