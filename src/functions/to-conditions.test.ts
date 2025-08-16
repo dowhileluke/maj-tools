@@ -33,3 +33,17 @@ test('yakuman tsumo', () => {
 	expect(conditions[0]?.directRon?.key).toEqual('11h')
 	expect(conditions[0]?.tsumo?.key).toEqual('Y')
 })
+
+test('correctly identify dealer tsumo ranking v1', () => {
+	const scores = [14_300, 23_000, 30_000, 44_000]
+	const conditions = toConditions({ scores, dealerIndex: 2, repeatCount: 2, leftoverCount: 0, })
+
+	expect(conditions[2]?.tsumo).toBeTruthy()
+})
+
+test('correctly identify dealer tsumo ranking v2', () => {
+	const scores = [15_000, 23_000, 30_000, null]
+	const conditions = toConditions({ scores, dealerIndex: 2, repeatCount: 0, leftoverCount: 0, })
+
+	expect(conditions[1]?.tsumo).toBeTruthy()
+})

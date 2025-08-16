@@ -11,9 +11,9 @@ function compareByDelta(a: TargetDelta, b: TargetDelta) {
 	return b.delta - a.delta
 }
 
-// tsumo vs dealer takes half effort
+// tsumo vs dealer takes less effort
 function asOyaDelta({ delta, isDealer }: TargetDelta) {
-	return isDealer ? Math.ceil(delta / 2) : delta
+	return isDealer ? Math.ceil(delta * 4 / 6) : Math.ceil(delta * 4 / 5)
 }
 
 function compareByTsumoDelta(a: TargetDelta, b: TargetDelta) {
@@ -110,7 +110,8 @@ export function toConditions({ scores, dealerIndex, repeatCount, leftoverCount }
 	})
 
 	const directRonConditions = directDeltas.map((delta => toRonCondition(delta - potByRon, isPovDealer)))
-	const tsumoConditions = targets.slice().sort(compareByTsumoDelta).map(({ delta, isDealer }) => toTsumoCondition(delta - potByTsumo, isPovDealer, isDealer))
+	const tsumoTargets = isPovDealer ? targets : targets.slice().sort(compareByTsumoDelta)
+	const tsumoConditions = tsumoTargets.map(({ delta, isDealer }) => toTsumoCondition(delta - potByTsumo, isPovDealer, isDealer))
 
 	const simpled = dedupe(simpleRonConditions)
 	const directed = dedupe(directRonConditions)
