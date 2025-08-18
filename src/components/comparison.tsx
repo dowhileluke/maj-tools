@@ -45,7 +45,7 @@ export function Comparison() {
 						key={i}
 						value={state.scores[i]}
 						onChange={n => actions.setScore(i, n)}
-						className="border rounded-sm text-center w-32"
+						className="border rounded-sm text-center w-24"
 					/>
 					{i > 0 && (
 						<div className="text-center text-xs leading-none">

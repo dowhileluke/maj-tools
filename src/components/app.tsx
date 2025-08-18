@@ -42,7 +42,7 @@ export function App() {
 	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
 
 	return (
-		<div>
+		<div className="flex flex-col items-center">
 			<Conditions />
 			<Comparison />
 		</div>

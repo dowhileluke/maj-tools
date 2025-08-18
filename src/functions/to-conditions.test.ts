@@ -47,3 +47,10 @@ test('correctly identify dealer tsumo ranking v2', () => {
 
 	expect(conditions[1]?.tsumo).toBeTruthy()
 })
+
+test('leftover stick with direct ron', () => {
+	const scores = [21_000, 30_000, null, null]
+	const conditions = toConditions({ scores, dealerIndex: 2, repeatCount: 0, leftoverCount: 1, })
+
+	expect(conditions[0]?.directRon?.key).toEqual('2h70')
+})

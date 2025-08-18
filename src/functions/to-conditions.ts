@@ -102,14 +102,15 @@ export function toConditions({ scores, dealerIndex, repeatCount, leftoverCount }
 	const simpleRonConditions = targets.map(({ delta }) => toRonCondition(delta - potByRon, isPovDealer))
 
 	// direct hit on target[i] must also exceed the next target's delta
+	// furthermore, factor in the pot before doing division
 	const directDeltas = targets.map(({ delta }, i) => {
-		const halfDelta = Math.ceil(delta / 2)
+		const halfDelta = Math.ceil((delta - potByRon) / 2)
 		const nextDelta = targets[i + 1]?.delta ?? 0
 
-		return Math.max(halfDelta, nextDelta)
+		return Math.max(halfDelta, nextDelta - potByRon)
 	})
 
-	const directRonConditions = directDeltas.map((delta => toRonCondition(delta - potByRon, isPovDealer)))
+	const directRonConditions = directDeltas.map((delta => toRonCondition(delta, isPovDealer)))
 	const tsumoTargets = isPovDealer ? targets : targets.slice().sort(compareByTsumoDelta)
 	const tsumoConditions = tsumoTargets.map(({ delta, isDealer }) => toTsumoCondition(delta - potByTsumo, isPovDealer, isDealer))
 
