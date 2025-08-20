@@ -21,7 +21,7 @@
 
 @layer components {
 	.compass {
-		display: grid;
+		display: inline-grid;
 		grid-template-areas: "tl t tr" "l c r" "bl b br";
 		grid-template-columns: auto auto auto;
 		justify-items: center;
@@ -32,8 +32,7 @@
 		& > :nth-child(3) { grid-area: t; }
 		& > :nth-child(4) { grid-area: l; }
 		& > :nth-child(5) { grid-area: c; }
-		& > :nth-child(6) { grid-area: bl; }
-		& > :nth-child(7) { grid-area: br; }
+		& > :nth-child(6) { grid-area: tr; }
 	}
 
 	.flex-center {

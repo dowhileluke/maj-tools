@@ -1,15 +1,16 @@
 import { Dispatch, PropsWithChildren, SetStateAction, useEffect, useState } from 'react'
+import { generateArray, split } from '@dowhileluke/fns'
 import { AppActions, AppState } from '../types'
 import { AppContext } from '../context'
 import { BG_HEX_CODE } from '../const'
 import { getPersistedState, setPersistedState } from '../functions/persist'
-import { split } from '@dowhileluke/fns'
 
 const initialState: AppState = {
 	isDealer: false,
 	isDelta: false,
 	isLightMode: false,
 	isMenuOpen: false,
+	isResetting: false,
 	scores: [null, null, null, null],
 	dealerIndex: 0,
 	repeatCount: 0,
@@ -56,6 +57,16 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 					dealerIndex: (prev.dealerIndex + 4 - index) % 4,
 				}
 			})
+		},
+		setIsResetting(isResetting) {
+			setState(prev => ({ ...prev, isResetting, }))
+		},
+		resetComparison(score) {
+			setState(prev => ({
+				...prev,
+				scores: generateArray(4, () => score),
+				isResetting: false,
+			}))
 		},
 	}
 

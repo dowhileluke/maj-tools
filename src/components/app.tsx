@@ -39,27 +39,29 @@ const tabStyle = 'flex-center flex-col min-w-20 px-2 py-1 leading-none rounded-m
 const iconProps: IconProps = { size: '1.5rem', weight: 'thin', }
 
 export function App() {
-	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
+	const [{ isLightMode, isMenuOpen, isResetting }, { setIsMenuOpen }] = useAppState()
+
+	// return (
+	// 	<div className="flex flex-col items-center">
+	// 		<Conditions />
+	// 		<Comparison />
+	// 	</div>
+	// )
+
+	const isModalOpen = isMenuOpen || isResetting
 
 	return (
-		<div className="flex flex-col items-center">
-			<Conditions />
-			<Comparison />
-		</div>
-	)
-
-	return (
-		<TabGroup as={DualPanel} expand="above" className={concat('h-screen', isMenuOpen && 'blur sm')}>
-			<TabPanels>
-				<TabPanel as={DualPanel} expand="above">
-					<ScoreTable />
-					<Controls />
-				</TabPanel>
+		<TabGroup className={concat('flex flex-col condensed:flex-row', isModalOpen && 'blur-sm')}>
+			<div className="shrink-0 pr-inset-0" />
+			<TabPanels as="div" className="grow p-4 pb-inset-4">
 				<TabPanel>
+				</TabPanel>
+				<TabPanel as={DualPanel} expand="below" className="gap-4 h-full">
+					<Conditions />
 					<Comparison />
 				</TabPanel>
 			</TabPanels>
-			<TabList as="nav" className="bg-mangan text-sm p-1 pr-inset-1 pb-inset-1 gap-2 flex justify-center condensed:flex-col">
+			<TabList as="nav" className="shrink-0 bg-mangan text-sm p-1 pr-inset-1 pb-inset-1 gap-2 flex justify-center condensed:flex-col lg:order-first">
 				<Tab className={tabStyle}>
 					<Table {...iconProps} />
 					<span className="condensed:hidden">Payment</span>

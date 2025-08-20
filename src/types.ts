@@ -54,6 +54,7 @@ export type AppState = ScoreState & {
 	isDelta: boolean;
 	isLightMode: boolean;
 	isMenuOpen: boolean;
+	isResetting: boolean;
 }
 
 export type AppActions = {
@@ -66,4 +67,6 @@ export type AppActions = {
 	setDealerIndex: (dealerIndex: number) => void;
 	setScore: (index: number, score: number | null) => void;
 	setPovIndex: (index: number) => void;
+	setIsResetting: (isResetting: boolean) => void;
+	resetComparison: (score: Score) => void;
 }
