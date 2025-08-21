@@ -54,3 +54,10 @@ test('leftover stick with direct ron', () => {
 
 	expect(conditions[0]?.directRon?.key).toEqual('2h70')
 })
+
+test('direct ron double gyakuten', () => {
+	const scores = [18500, 31700, 27000, 21800]
+	const conditions = toConditions({ scores, dealerIndex: 1, repeatCount: 0, leftoverCount: 1, })
+
+	expect(conditions[1]?.directRon?.key).toEqual('3h30')
+})
