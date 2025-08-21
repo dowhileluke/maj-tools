@@ -51,7 +51,7 @@ export function Counter({ value, onChange, ...props }: Replace<ComponentProps<'s
 }
 
 export function RepeatCounter(props: ComponentProps<'select'>) {
-	const [{ repeatCount }, { setRepeatCount }] = useAppState()
+	const [{ repeatCount = 0 }, { setRepeatCount }] = useAppState()
 
 	return (
 		<Counter {...props} value={repeatCount} onChange={setRepeatCount} />
@@ -59,7 +59,7 @@ export function RepeatCounter(props: ComponentProps<'select'>) {
 }
 
 export function LeftoverCounter(props: ComponentProps<'select'>) {
-	const [{ leftoverCount }, { setLeftoverCount }] = useAppState()
+	const [{ leftoverCount = 0 }, { setLeftoverCount }] = useAppState()
 
 	return (
 		<Counter {...props} value={leftoverCount} onChange={setLeftoverCount} />

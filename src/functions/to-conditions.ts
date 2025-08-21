@@ -26,13 +26,14 @@ function isPreferable(existing: PointComponents | null, baseValue: number) {
 	return baseValue < existing.baseValue
 }
 
-function toRonCondition(targetDelta: number, isDealer: boolean) {
+function toRonCondition(targetDelta: number, isDealer: boolean, isSimpleFu: boolean) {
+	const maxFu = isSimpleFu ? 40 : 70
 	let minCondition: PointComponents | null = null
 
 	for (const components of BASE_VALUE_LIST) {
 		const { fu, baseValue } = components
 
-		if (fu === 20 || fu === 60 || fu > 70) continue // exclude pinfu+tsumo and large fu
+		if (fu === 20 || fu === 60 || fu > maxFu) continue // exclude pinfu+tsumo and large fu
 
 		const { koRon, oyaRon } = BASE_VALUE_POINTS[baseValue]
 		const ronValue = isDealer ? oyaRon : koRon
@@ -45,13 +46,14 @@ function toRonCondition(targetDelta: number, isDealer: boolean) {
 	return minCondition
 }
 
-function toTsumoCondition(targetDelta: number, isPovDealer: boolean, isTargetDealer: boolean) {
+function toTsumoCondition(targetDelta: number, isPovDealer: boolean, isTargetDealer: boolean, isSimpleFu: boolean) {
+	const maxFu = isSimpleFu ? 30 : 50
 	let minCondition: PointComponents | null = null
 
 	for (const components of BASE_VALUE_LIST) {
 		const { fu, baseValue } = components
 
-		if (fu > 50) continue // exclude large fu
+		if (fu > maxFu) continue // exclude large fu
 
 		const { oyaGainsByTsumo, koGainsVsOyaByTsumo, koGainsVsKoByTsumo } = BASE_VALUE_POINTS[baseValue]
 		const tsumoGains = isPovDealer ? oyaGainsByTsumo : (
@@ -83,7 +85,7 @@ function dedupe(list: Array<PointComponents | null>) {
 	return result
 }
 
-export function toConditions({ scores, dealerIndex, repeatCount, leftoverCount }: ScoreState) {
+export function toConditions({ scores, dealerIndex, repeatCount = 0, leftoverCount = 0, isSimpleFu = false, }: ScoreState) {
 	const isPovDealer = dealerIndex === 0
 	const deltaList = toDeltas(scores)
 	const targets: TargetDelta[] = []
@@ -99,7 +101,7 @@ export function toConditions({ scores, dealerIndex, repeatCount, leftoverCount }
 	const potByRon = 300 * repeatCount + 1000 * leftoverCount
 	const potByTsumo = 400 * repeatCount + 1000 * leftoverCount
 
-	const simpleRonConditions = targets.map(({ delta }) => toRonCondition(delta - potByRon, isPovDealer))
+	const simpleRonConditions = targets.map(({ delta }) => toRonCondition(delta - potByRon, isPovDealer, isSimpleFu))
 
 	// direct hit on target[i] must also exceed the next target's delta
 	// furthermore, factor in the pot before doing division
@@ -110,9 +112,9 @@ export function toConditions({ scores, dealerIndex, repeatCount, leftoverCount }
 		return Math.max(halfDelta, nextDelta - potByRon)
 	})
 
-	const directRonConditions = directDeltas.map((delta => toRonCondition(delta, isPovDealer)))
+	const directRonConditions = directDeltas.map((delta => toRonCondition(delta, isPovDealer, isSimpleFu)))
 	const tsumoTargets = isPovDealer ? targets : targets.slice().sort(compareByTsumoDelta)
-	const tsumoConditions = tsumoTargets.map(({ delta, isDealer }) => toTsumoCondition(delta - potByTsumo, isPovDealer, isDealer))
+	const tsumoConditions = tsumoTargets.map(({ delta, isDealer }) => toTsumoCondition(delta - potByTsumo, isPovDealer, isDealer, isSimpleFu))
 
 	const simpled = dedupe(simpleRonConditions)
 	const directed = dedupe(directRonConditions)

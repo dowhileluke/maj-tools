@@ -11,6 +11,7 @@ import { LeftoverCounter, RepeatCounter } from './counter'
 import { FlexLabel } from './flex-label'
 import { IntegerInput } from './integer-input'
 import { Modal } from './modal'
+import { Toggle } from './toggle'
 
 const labels = ['POV', 'Shimocha', 'Toimen', 'Kamicha']
 
@@ -72,6 +73,9 @@ export function Comparison() {
 			</div>
 			<div className="grow" />
 			<div className="flex-center gap-4">
+				<FlexLabel title="Simple fu">
+					<Toggle checked={state.isSimpleFu} onChange={actions.setIsSimpleFu} />
+				</FlexLabel>
 				<FlexLabel title="Repeats" htmlFor={repeatId}>
 					<RepeatCounter id={repeatId} />
 				</FlexLabel>

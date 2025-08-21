@@ -45,8 +45,9 @@ export type RankedDelta = {
 export type ScoreState = {
 	scores: Score[];
 	dealerIndex: number;
-	repeatCount: number;
-	leftoverCount: number;
+	repeatCount?: number;
+	leftoverCount?: number;
+	isSimpleFu?: boolean;
 }
 
 export type AppState = ScoreState & {
@@ -69,4 +70,5 @@ export type AppActions = {
 	setPovIndex: (index: number) => void;
 	setIsResetting: (isResetting: boolean) => void;
 	resetComparison: (score: Score) => void;
+	setIsSimpleFu: (isSimpleFu: boolean) => void;
 }

@@ -15,6 +15,7 @@ const initialState: AppState = {
 	dealerIndex: 0,
 	repeatCount: 0,
 	leftoverCount: 0,
+	isSimpleFu: false,
 	...getPersistedState(),
 }
 
@@ -67,6 +68,9 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 				scores: generateArray(4, () => score),
 				isResetting: false,
 			}))
+		},
+		setIsSimpleFu(isSimpleFu) {
+			setState(prev => ({ ...prev, isSimpleFu, }))
 		},
 	}
 
