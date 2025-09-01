@@ -1,5 +1,6 @@
 import { BASE_VALUE_LIST, BASE_VALUE_POINTS } from '../const'
 import { Condition, PointComponents, ScoreState } from '../types'
+import { hasIdenticalItems } from './has-identical-items';
 import { toDeltas } from './to-deltas'
 
 type TargetDelta = {
@@ -16,7 +17,7 @@ function asOyaDelta({ delta, isDealer }: TargetDelta) {
 	return isDealer ? Math.ceil(delta * 4 / 6) : Math.ceil(delta * 4 / 5)
 }
 
-function compareByTsumoDelta(a: TargetDelta, b: TargetDelta) {
+function compareByx_tsumoelta(a: TargetDelta, b: TargetDelta) {
 	return asOyaDelta(b) - asOyaDelta(a)
 }
 
@@ -113,21 +114,25 @@ export function toConditions({ scores, dealerIndex, repeatCount = 0, leftoverCou
 	})
 
 	const directRonConditions = directDeltas.map((delta => toRonCondition(delta, isPovDealer, isSimpleFu)))
-	const tsumoTargets = isPovDealer ? targets : targets.slice().sort(compareByTsumoDelta)
+	const tsumoTargets = isPovDealer ? targets : targets.slice().sort(compareByx_tsumoelta)
 	const tsumoConditions = tsumoTargets.map(({ delta, isDealer }) => toTsumoCondition(delta - potByTsumo, isPovDealer, isDealer, isSimpleFu))
 
-	const simpled = dedupe(simpleRonConditions)
-	const directed = dedupe(directRonConditions)
-	const tsumod = dedupe(tsumoConditions)
+	const x_simple = dedupe(simpleRonConditions)
+	const x_direct = dedupe(directRonConditions)
+	const x_tsumo = dedupe(tsumoConditions)
 
-	const positionalConditions = simpled.map((simpleRon, i) => {
-		let directRon = directed[i]
-		const tsumo = tsumod[i]
+	const positionalConditions = x_simple.map((simpleRon, i) => {
+		let directRon = x_direct[i]
+		const tsumo = x_tsumo[i]
 
 		if (!simpleRon && !directRon && !tsumo) return null
 
-		// ignore directRon if simpleRon is easier
-		if (simpleRon && directRon && simpleRon.baseValue <= directRon.baseValue) {
+		// a) if all players are effectively tied, just overtake any of them
+		// b) ignore directRon if simpleRon is easier
+		if (i > 1 && hasIdenticalItems(simpleRonConditions)) {
+			simpleRon = directRon
+			directRon = null
+		} else if (simpleRon && directRon && simpleRon.baseValue <= directRon.baseValue) {
 			directRon = null
 		}
 

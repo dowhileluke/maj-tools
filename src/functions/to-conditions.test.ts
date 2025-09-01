@@ -13,10 +13,11 @@ test('overtake three-way tie', () => {
 	const scores = [0, 11_000, 11_000, 11_000]
 	const conditions = toConditions({ scores, dealerIndex: 0, })
 
-	// 2nd place is impossible; directRon will take 3rd
+	console.log(conditions)
+
+	// 2nd place is impossible; any ron will take 3rd
 	expect(conditions[1]).toBeNull()
-	expect(conditions[2]?.simpleRon).toBeNull()
-	expect(conditions[2]?.directRon).not.toBeNull()
+	expect(conditions[2]?.simpleRon).not.toBeNull()
 })
 
 test('tied players have no directRon', () => {
@@ -60,4 +61,18 @@ test('direct ron double gyakuten', () => {
 	const conditions = toConditions({ scores, dealerIndex: 1, leftoverCount: 1, })
 
 	expect(conditions[1]?.directRon?.key).toEqual('3h30')
+})
+
+test('taking distant 1st', () => {
+	const scores = [16600, 41400, 40500, null]
+	const conditions = toConditions({ scores, dealerIndex: 3, })
+
+	expect(conditions[0]?.directRon?.key).toEqual('11h')
+})
+
+test('any overtake escapes last', () => {
+	const scores = [16700, 40600, 40500, 40400]
+	const conditions = toConditions({ scores, dealerIndex: 3, })
+
+	expect(conditions[2]?.simpleRon?.key).toEqual('6h')
 })
