@@ -5,8 +5,9 @@ import { useAppState } from '../hooks/use-app-state'
 
 const condStyles = 'border-[2px] rounded-lg w-32 h-24 leading-[1.1]'
 const rankStyles: Record<number, string> = {
-	0: 'text-yellow-600 bg-yellow-300',
+	0: 'text-amber-600 bg-amber-300',
 	1: 'text-zinc-500 bg-zinc-300',
+	// 2: 'text-amber-700 bg-amber-400',
 }
 
 export function Conditions() {
@@ -19,7 +20,7 @@ export function Conditions() {
 					<h1 className="text-center font-bold text-xl italic">{RANK_LABELS[i]}</h1>
 					<div className="grow" />
 					<ul>
-						{c.directRon && (<li>{c.directRon.key} direct ron</li>)}
+						{c.directRon && (<li>{c.directRon.key} direct</li>)}
 						{c.simpleRon && (<li>{c.simpleRon.key} ron</li>)}
 						{c.tsumo && (<li>{c.tsumo.key} tsumo</li>)}
 					</ul>

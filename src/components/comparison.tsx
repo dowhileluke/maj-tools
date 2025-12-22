@@ -58,7 +58,7 @@ export function Comparison() {
 							onChange={n => actions.setScore(i, n)}
 							className={inputStyle}
 						/>
-						{i > 0 && (
+						{i > 0 && Boolean(state.scores[0]) && (
 							<div className="text-center text-xs leading-none">
 								{signed(rankedDeltas[i].delta)}
 							</div>
