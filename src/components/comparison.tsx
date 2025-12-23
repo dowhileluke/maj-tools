@@ -1,9 +1,10 @@
-import { useId, useState } from 'react'
+import { KeyboardEvent, useId, useState } from 'react'
 import { Pencil, User, UserSwitch } from '@phosphor-icons/react'
 import { generateArray } from '@dowhileluke/fns'
 import { concat } from '../functions/concat'
 import { toRankedDeltas } from '../functions/to-ranked-deltas'
 import { useAppState } from '../hooks/use-app-state'
+import { useDraftState } from '../hooks/use-draft-state'
 import { RANK_LABELS } from '../const'
 import { Button } from './button'
 import { Compass } from './compass'
@@ -24,6 +25,12 @@ function signed(n: number | null) {
 	if (n < 0) return n
 
 	return '+' + n
+}
+
+function fromShorthand(n: number | null) {
+	if (n && n % 100) return n * 100
+
+	return n
 }
 
 export function Comparison() {
@@ -52,11 +59,9 @@ export function Comparison() {
 								<> &middot; {RANK_LABELS[rankedDeltas[i].rankIndex]}</>
 							)}
 						</div>
-						<IntegerInput
-							key={i}
+						<InputDraft
 							value={state.scores[i]}
-							onChange={n => actions.setScore(i, n)}
-							className={inputStyle}
+							onSubmit={n => actions.setScore(i, fromShorthand(n))}
 						/>
 						{i > 0 && Boolean(state.scores[0]) && (
 							<div className="text-center text-xs leading-none">
@@ -86,20 +91,60 @@ export function Comparison() {
 			<Modal
 				open={state.isResetting}
 				onClose={() => actions.setIsResetting(false)}
-				className="flex-center flex-col gap-8"
 			>
-				<h3 className="text-xl font-bold">Edit all scores?</h3>
-				<IntegerInput
-					value={value}
-					onChange={setValue}
-					className={inputStyle}
-					placeholder="(blank)"
-				/>
-				<div className="flex gap-4">
-					<Button className={buttonStyle} onClick={() => actions.setIsResetting(false)}>Cancel</Button>
-					<Button className={destroyStyle} onClick={() => actions.resetComparison(value)}>Confirm</Button>
-				</div>
+				<form
+					className="flex-center flex-col gap-8"
+					onSubmit={e => {
+						e.preventDefault()
+						actions.resetComparison(fromShorthand(value))
+					}}
+				>
+					<h3 className="text-xl font-bold">Edit all scores?</h3>
+					<IntegerInput
+						value={value}
+						onChange={setValue}
+						className={inputStyle}
+						placeholder="(blank)"
+					/>
+					<div className="flex gap-4">
+						<Button className={buttonStyle} onClick={() => actions.setIsResetting(false)}>
+							Cancel
+						</Button>
+						<Button type="submit" className={destroyStyle}>
+							Confirm
+						</Button>
+					</div>
+				</form>
 			</Modal>
 		</div>
+	)
+}
+
+type InputDraftProps = {
+	value: number | null;
+	onSubmit: (n: number | null) => void;
+}
+
+function InputDraft({ value, onSubmit }: InputDraftProps) {
+	const [draft, setDraft] = useDraftState(value)
+
+	function handleSubmit() {
+		onSubmit(draft)
+	}
+
+	function handleKey(e: KeyboardEvent<HTMLInputElement>) {
+		if (e.key === 'Enter') {
+			handleSubmit()
+		}
+	}
+
+	return (
+		<IntegerInput
+			value={draft}
+			onChange={setDraft}
+			onBlur={handleSubmit}
+			onKeyDown={handleKey}
+			className={inputStyle}
+		/>
 	)
 }
