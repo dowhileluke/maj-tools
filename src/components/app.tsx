@@ -50,9 +50,11 @@ export function App() {
 			isModalOpen && 'blur-sm',
 		)}>
 			<div className="shrink-0 pr-inset-0" />
-			<TabPanels as="div" className="grow p-4 pb-inset-4 overflow-hidden">
-				<TabPanel as={DualPanel} expand="above" fixed className="justify-center items-center">
+			<TabPanels as="div" className="grow p-3 pb-inset-3 overflow-hidden">
+				<TabPanel className="flex flex-col justify-center items-center h-full overflow-hidden">
+					<div className="grow" />
 					<ScoreTable />
+					<div className="grow" />
 					<Controls />
 				</TabPanel>
 				<TabPanel as={DualPanel} expand="below" className="gap-4">
