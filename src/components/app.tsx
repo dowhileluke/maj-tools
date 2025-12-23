@@ -17,7 +17,7 @@ export function App1() {
 	return (
 		<div className={concat('h-screen flex flex-col gap-4 justify-center items-center', isMenuOpen && 'blur sm')}>
 			<ScoreTable />
-			<Controls />
+			<Controls version={1} />
 			<Modal
 				open={isMenuOpen}
 				onClose={() => setIsMenuOpen(false)}
@@ -40,23 +40,22 @@ const iconProps: IconProps = { size: '1.5rem', weight: 'thin', }
 
 export function App() {
 	const [{ isLightMode, isMenuOpen, isResetting }, { setIsMenuOpen }] = useAppState()
-
-	// return (
-	// 	<div className="flex flex-col items-center">
-	// 		<Conditions />
-	// 		<Comparison />
-	// 	</div>
-	// )
-
 	const isModalOpen = isMenuOpen || isResetting
 
 	return (
-		<TabGroup className={concat('flex flex-col condensed:flex-row', isModalOpen && 'blur-sm')}>
+		<TabGroup
+		className={concat(
+			'flex flex-col condensed:flex-row',
+			'w-full h-full overflow-hidden',
+			isModalOpen && 'blur-sm',
+		)}>
 			<div className="shrink-0 pr-inset-0" />
-			<TabPanels as="div" className="grow p-4 pb-inset-4">
-				<TabPanel>
+			<TabPanels as="div" className="grow p-4 pb-inset-4 overflow-hidden">
+				<TabPanel as={DualPanel} expand="above" fixed className="justify-center items-center">
+					<ScoreTable />
+					<Controls />
 				</TabPanel>
-				<TabPanel as={DualPanel} expand="below" className="gap-4 h-full">
+				<TabPanel as={DualPanel} expand="below" className="gap-4">
 					<Conditions />
 					<Comparison />
 				</TabPanel>

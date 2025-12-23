@@ -1,5 +1,5 @@
 import { useId, useState } from 'react'
-import { Eraser, User, UserSwitch } from '@phosphor-icons/react'
+import { Pencil, User, UserSwitch } from '@phosphor-icons/react'
 import { generateArray } from '@dowhileluke/fns'
 import { concat } from '../functions/concat'
 import { toRankedDeltas } from '../functions/to-ranked-deltas'
@@ -34,7 +34,7 @@ export function Comparison() {
 	const rankedDeltas = toRankedDeltas(state.scores)
 
 	return (
-		<div className="flex-center flex-col gap-4">
+		<div className="flex-center flex-col overflow-hidden">
 			<div className="grow" />
 			<div className="compass gap-4">
 				{generateArray(4, i => (
@@ -67,13 +67,13 @@ export function Comparison() {
 				))}
 				<Compass value={state.dealerIndex} onChange={actions.setDealerIndex} />
 				<Button className={destroyStyle} onClick={() => actions.setIsResetting(true)}>
-					<Eraser />
-					Reset
+					<Pencil />
+					Edit All
 				</Button>
 			</div>
 			<div className="grow" />
 			<div className="flex-center gap-4">
-				<FlexLabel title="Simple fu">
+				<FlexLabel title="Small Fu">
 					<Toggle checked={state.isSimpleFu} onChange={actions.setIsSimpleFu} />
 				</FlexLabel>
 				<FlexLabel title="Repeats" htmlFor={repeatId}>
@@ -88,7 +88,7 @@ export function Comparison() {
 				onClose={() => actions.setIsResetting(false)}
 				className="flex-center flex-col gap-8"
 			>
-				<h3 className="text-xl font-bold">Reset all scores?</h3>
+				<h3 className="text-xl font-bold">Edit all scores?</h3>
 				<IntegerInput
 					value={value}
 					onChange={setValue}
@@ -97,7 +97,7 @@ export function Comparison() {
 				/>
 				<div className="flex gap-4">
 					<Button className={buttonStyle} onClick={() => actions.setIsResetting(false)}>Cancel</Button>
-					<Button className={destroyStyle} onClick={() => actions.resetComparison(value)}>Reset</Button>
+					<Button className={destroyStyle} onClick={() => actions.resetComparison(value)}>Confirm</Button>
 				</div>
 			</Modal>
 		</div>
