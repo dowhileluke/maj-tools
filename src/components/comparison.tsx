@@ -77,7 +77,7 @@ export function Comparison() {
 				</Button>
 			</div>
 			<div className="grow" />
-			<div className="flex-center gap-4">
+			<div className="flex-center gap-8">
 				<FlexLabel title="Small Fu">
 					<Toggle checked={state.isSimpleFu} onChange={actions.setIsSimpleFu} />
 				</FlexLabel>
