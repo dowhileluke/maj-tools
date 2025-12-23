@@ -1,4 +1,5 @@
 import { Dispatch, PropsWithChildren, SetStateAction, useEffect, useState } from 'react'
+import { generateArray, split } from '@dowhileluke/fns'
 import { AppActions, AppState } from '../types'
 import { AppContext } from '../context'
 import { BG_HEX_CODE } from '../const'
@@ -9,7 +10,12 @@ const initialState: AppState = {
 	isDelta: false,
 	isLightMode: false,
 	isMenuOpen: false,
+	isResetting: false,
+	scores: [null, null, null, null],
+	dealerIndex: 0,
 	repeatCount: 0,
+	leftoverCount: 0,
+	isSimpleFu: false,
 	...getPersistedState(),
 }
 
@@ -30,6 +36,42 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 		setRepeatCount(repeatCount) {
 			setState(prev => ({ ...prev, repeatCount, }))
 		},
+		setLeftoverCount(leftoverCount) {
+			setState(prev => ({ ...prev, leftoverCount, }))
+		},
+		setDealerIndex(dealerIndex) {
+			setState(prev => ({ ...prev, dealerIndex, }))
+		},
+		setScore(index, score) {
+			setState(prev => ({
+				...prev,
+				scores: prev.scores.map((n, i) => i === index ? score : n)
+			}))
+		},
+		setPovIndex(index) {
+			setState(prev => {
+				const [head, tail] = split(prev.scores, index)
+
+				return {
+					...prev,
+					scores: tail.concat(head),
+					dealerIndex: (prev.dealerIndex + 4 - index) % 4,
+				}
+			})
+		},
+		setIsResetting(isResetting) {
+			setState(prev => ({ ...prev, isResetting, }))
+		},
+		resetComparison(score) {
+			setState(prev => ({
+				...prev,
+				scores: generateArray(4, () => score),
+				isResetting: false,
+			}))
+		},
+		setIsSimpleFu(isSimpleFu) {
+			setState(prev => ({ ...prev, isSimpleFu, }))
+		},
 	}
 
 	return result
@@ -38,13 +80,16 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 export function AppStateProvider({ children }: PropsWithChildren) {
 	const [state, setState] = useState(initialState)
 	const [actions] = useState(() => bindActions(setState))
-	const { isLightMode } = state
+	const { isLightMode, scores } = state
 
 	useEffect(() => {
 		document.documentElement.classList.toggle('light', isLightMode)
-
-		setPersistedState({ isLightMode })
 	}, [isLightMode])
+	
+
+	useEffect(() => {
+		setPersistedState({ isLightMode, scores })
+	}, [isLightMode, scores])
 
 	return (
 		<AppContext value={[state, actions]}>

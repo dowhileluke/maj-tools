@@ -4,20 +4,26 @@ import { useAppState } from '../hooks/use-app-state'
 import { FlexLabel } from './flex-label'
 import { Toggle } from './toggle'
 import { Ton } from './ton'
-import { RepeatCounter } from './repeat-counter'
+import { RepeatCounter } from './counter'
 import { Button } from './button'
 
 export const iconStyle = 'transition duration-500 ease-in-out text-transparent group-data-checked:text-(--back)'
 
-export function Controls() {
+type ControlsProps = {
+	version?: 1 | 2;
+}
+
+export function Controls({ version = 2 }: ControlsProps) {
 	const id = useId()
 	const [state, actions] = useAppState()
 
 	return (
-		<div className="flex gap-8 items-center">
-			<Button onClick={() => actions.setIsMenuOpen(true)}>
-				<List size="2em" weight="thin" />
-			</Button>
+		<div className="flex gap-8 justify-center items-center">
+			{version < 2 && (
+				<Button onClick={() => actions.setIsMenuOpen(true)}>
+					<List size="2em" weight="thin" />
+				</Button>
+			)}
 			<FlexLabel title="Relative">
 				<Toggle checked={state.isDelta} onChange={actions.setIsDelta} />
 			</FlexLabel>

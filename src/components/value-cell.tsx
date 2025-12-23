@@ -13,7 +13,7 @@ type ValueCellProps = {
 const leadingStyle = 'leading-[1rem]'
 
 export function ValueCell({ han, fu }: ValueCellProps) {
-	const [{ isDealer, isDelta, repeatCount }] = useAppState()
+	const [{ isDealer, isDelta, repeatCount = 0 }] = useAppState()
 	let baseValue = fu ? toBaseValue(han, fu) : LIMIT_HANDS[han].baseValue
 	const isMangan = fu ? (baseValue >= KIRIAGE_BASE_VALUE) : (baseValue === MANGAN_BASE_VALUE)
 

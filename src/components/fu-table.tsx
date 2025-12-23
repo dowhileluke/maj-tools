@@ -5,7 +5,7 @@ import { Cell } from './cell'
 import { ValueCell } from './value-cell'
 import { Note } from './note'
 
-const colStyle = 'flex flex-col shrink-0 w-24 snap-start first:border-l'
+const colStyle = 'flex flex-col shrink-0 w-24 snap-center first:border-l'
 const notes: Record<number, string> = {
 	20: 'Pinfu + Tsumo',
 	25: 'Chiitoi',
@@ -16,8 +16,8 @@ export function FuTable() {
 	const secondRef = useRef<HTMLDivElement>(null)
 
 	const refMap: Record<number, RefObject<HTMLDivElement | null>> = {
-		60: firstRef,
-		30: secondRef,
+		50: firstRef,
+		20: secondRef,
 	}
 
 	useEffect(() => {
@@ -27,8 +27,8 @@ export function FuTable() {
 	}, [])
 
 	return (
-		<BorderBox className="border-t">
-			<div className="flex w-72 landscape:w-120 overflow-auto snap-x no-scrollbar touch-pan-x">
+		<BorderBox className="grow border-t overflow-hidden">
+			<div className="flex overflow-auto snap-x no-scrollbar touch-pan-x">
 				{FU_LIST.map(fu => (
 					<div key={fu} className={colStyle} ref={refMap[fu]}>
 						<Cell short>

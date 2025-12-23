@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { BG_HEX_CODE } from './src/const'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -15,8 +16,8 @@ export default defineConfig({
         name: 'MajTools',
         short_name: 'MajTools',
         description: 'Mahjong Tools',
-        theme_color: '#262626',
-        background_color: '#262626',
+        theme_color: BG_HEX_CODE,
+        background_color: BG_HEX_CODE,
         icons: [
           {
             src: 'pwa-192x192.png',

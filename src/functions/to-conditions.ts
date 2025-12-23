@@ -1,0 +1,149 @@
+import { BASE_VALUE_LIST, BASE_VALUE_POINTS } from '../const'
+import { Condition, PointComponents, ScoreState } from '../types'
+import { hasIdenticalItems } from './has-identical-items';
+import { toDeltas } from './to-deltas'
+
+type TargetDelta = {
+	delta: number;
+	isDealer: boolean;
+}
+
+function compareByDelta(a: TargetDelta, b: TargetDelta) {
+	return b.delta - a.delta
+}
+
+// tsumo vs dealer takes less effort
+function asOyaDelta({ delta, isDealer }: TargetDelta) {
+	return isDealer ? Math.ceil(delta * 4 / 6) : Math.ceil(delta * 4 / 5)
+}
+
+function compareByx_tsumoelta(a: TargetDelta, b: TargetDelta) {
+	return asOyaDelta(b) - asOyaDelta(a)
+}
+
+function isPreferable(existing: PointComponents | null, baseValue: number) {
+	if (!existing) return true
+
+	return baseValue < existing.baseValue
+}
+
+function toRonCondition(targetDelta: number, isDealer: boolean, isSimpleFu: boolean) {
+	const maxFu = isSimpleFu ? 40 : 70
+	let minCondition: PointComponents | null = null
+
+	for (const components of BASE_VALUE_LIST) {
+		const { fu, baseValue } = components
+
+		if (fu === 20 || fu === 60 || fu > maxFu) continue // exclude pinfu+tsumo and large fu
+
+		const { koRon, oyaRon } = BASE_VALUE_POINTS[baseValue]
+		const ronValue = isDealer ? oyaRon : koRon
+
+		if (ronValue > targetDelta && isPreferable(minCondition, baseValue)) {
+			minCondition = components
+		}
+	}
+
+	return minCondition
+}
+
+function toTsumoCondition(targetDelta: number, isPovDealer: boolean, isTargetDealer: boolean, isSimpleFu: boolean) {
+	const maxFu = isSimpleFu ? 30 : 50
+	let minCondition: PointComponents | null = null
+
+	for (const components of BASE_VALUE_LIST) {
+		const { fu, baseValue } = components
+
+		if (fu > maxFu) continue // exclude large fu
+
+		const { oyaGainsByTsumo, koGainsVsOyaByTsumo, koGainsVsKoByTsumo } = BASE_VALUE_POINTS[baseValue]
+		const tsumoGains = isPovDealer ? oyaGainsByTsumo : (
+			isTargetDealer ? koGainsVsOyaByTsumo : koGainsVsKoByTsumo
+		)
+
+		if (tsumoGains > targetDelta && isPreferable(minCondition, baseValue)) {
+			minCondition = components
+		}
+	}
+
+	return minCondition
+}
+
+function dedupe(list: Array<PointComponents | null>) {
+	const result: Array<PointComponents | null> = []
+	let prev: PointComponents | null = null
+
+	for (const item of list) {
+		if (!prev || !item || (prev.baseValue > item.baseValue)) {
+			prev = item
+
+			result.push(item)
+		} else {
+			result.push(null)
+		}
+	}
+
+	return result
+}
+
+export function toConditions({ scores, dealerIndex, repeatCount = 0, leftoverCount = 0, isSimpleFu = false, }: ScoreState) {
+	const isPovDealer = dealerIndex === 0
+	const deltaList = toDeltas(scores)
+	const targets: TargetDelta[] = []
+
+	for (const [index, delta] of deltaList.entries()) {
+		if (delta !== null && delta > 0) {
+			targets.push({ delta, isDealer: index === dealerIndex, })
+		}
+	}
+
+	targets.sort(compareByDelta)
+
+	const potByRon = 300 * repeatCount + 1000 * leftoverCount
+	const potByTsumo = 400 * repeatCount + 1000 * leftoverCount
+
+	const simpleRonConditions = targets.map(({ delta }) => toRonCondition(delta - potByRon, isPovDealer, isSimpleFu))
+
+	// direct hit on target[i] must also exceed the next target's delta
+	// furthermore, factor in the pot before doing division
+	const directDeltas = targets.map(({ delta }, i) => {
+		const halfDelta = Math.ceil((delta - potByRon) / 2)
+		const nextDelta = targets[i + 1]?.delta ?? 0
+
+		return Math.max(halfDelta, nextDelta - potByRon)
+	})
+
+	const directRonConditions = directDeltas.map((delta => toRonCondition(delta, isPovDealer, isSimpleFu)))
+	const tsumoTargets = isPovDealer ? targets : targets.slice().sort(compareByx_tsumoelta)
+	const tsumoConditions = tsumoTargets.map(({ delta, isDealer }) => toTsumoCondition(delta - potByTsumo, isPovDealer, isDealer, isSimpleFu))
+
+	const x_simple = dedupe(simpleRonConditions)
+	const x_direct = dedupe(directRonConditions)
+	const x_tsumo = dedupe(tsumoConditions)
+
+	const positionalConditions = x_simple.map((simpleRon, i) => {
+		let directRon = x_direct[i]
+		const tsumo = x_tsumo[i]
+
+		if (!simpleRon && !directRon && !tsumo) return null
+
+		// a) if all players are effectively tied, just overtake any of them
+		// b) ignore directRon if simpleRon is easier
+		if (i > 1 && hasIdenticalItems(simpleRonConditions)) {
+			simpleRon = directRon
+			directRon = null
+		} else if (simpleRon && directRon && simpleRon.baseValue <= directRon.baseValue) {
+			directRon = null
+		}
+
+		const result: Condition = {
+			simpleRon,
+			directRon,
+			tsumo,
+		}
+
+		return result
+	})
+
+	return positionalConditions
+}
