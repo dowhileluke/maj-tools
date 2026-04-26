@@ -1,3 +1,4 @@
+import { generateArray } from "@dowhileluke/fns"
 
 export function pluckTiles(hand: number[], indexes: number[]) {
     const result = [...hand]
@@ -21,6 +22,6 @@ export function pluckTriplet(hand: number[], index: number) {
     return pluckTiles(hand, [index, index, index])
 }
 
-export function pluckSequence(hand: number[], index: number) {
-    return pluckTiles(hand, [index, index + 1, index + 2])
+export function pluckSequence(hand: number[], index: number, length = 3) {
+    return pluckTiles(hand, generateArray(length, n => n + index))
 }

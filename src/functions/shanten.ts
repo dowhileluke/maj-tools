@@ -1,5 +1,5 @@
-import { pluckPair, pluckSequence, pluckTriplet } from "./pluck";
-
+import { generateArray } from '@dowhileluke/fns';
+import { pluckPair, pluckSequence, pluckTiles, pluckTriplet } from './pluck'
 
 type ShantenState = {
     hand: number[];
@@ -9,77 +9,124 @@ type ShantenState = {
     partial: number;
 }
 
-export function shanten(state: ShantenState) {
-    let result = 8
+export function shanten(hand: number[]) {
+    const init: ShantenState = {
+        hand,
+        index: 1,
+        pair: 0,
+        complete: 0,
+        partial: 0,
+    }
+    let best = 8
 
-    for (let i = state.index; i < state.hand.length; i++) {
-        if (state.hand[i] > 1) {
+    // try all pair candidates
+    for (let i = 1; i < hand.length; i++) {
+        if (hand[i] > 1) {
             const s = extractComplete({
-                ...state,
-                hand: pluckPair(state.hand, i),
+                ...init,
+                hand: pluckPair(hand, i),
                 pair: 1,
             })
 
-            result = Math.min(result, s)
+            best = Math.min(best, s)
         }
     }
 
-    return result
+    // try without a pair
+    const s = extractComplete(init)
+
+    return Math.min(best, s)
 }
 
-function isSeq(hand: number[], i: number) {
-    if (i >= 30) return false // honor
-
-    if (hand[i + 0] < 1) return false
-    if (hand[i + 1] < 1) return false
-    if (hand[i + 2] < 1) return false
-
-    return true
+function isSeq(hand: number[], i: number, length = 3) {
+    return i < 30 && hand.slice(i, i + length - 1).every(n => n)
 }
 
 function extractComplete(state: ShantenState) {
+    let best = 8
+
     for (let i = state.index; i < state.hand.length; i++) {
         if (state.hand[i] > 2) {
-            return extractComplete({
+            const s = extractComplete({
                 ...state,
                 hand: pluckTriplet(state.hand, i),
                 index: i,
                 complete: state.complete + 1,
             })
+
+            best = Math.min(best, s)
         }
 
         if (isSeq(state.hand, i)) {
-            return extractComplete({
+            const s = extractComplete({
                 ...state,
                 hand: pluckSequence(state.hand, i),
                 index: i,
                 complete: state.complete + 1,
             })
+
+            best = Math.min(best, s)
         }
     }
 
-    return extractPartial({
+    const s = extractPartial({
         ...state,
         index: 0,
     })
+
+    return Math.min(best, s)
 }
 
-function toResult({ pair, complete, partial }: ShantenState) {
+function calc({ pair, complete, partial }: ShantenState) {
     return 8 - (complete * 2) - partial - pair
 }
 
 function extractPartial(state: ShantenState) {
+    // could probably short-circuit here with a large partial count
+
+    let best = 8
+
     for (let i = state.index; i < state.hand.length; i++) {
-        // extract partial groups here
+        const n = state.hand[i]
+
+        if (n < 1) continue
+
+        // pair
+        if (n > 1) {
+            const s = extractPartial({
+                ...state,
+                hand: pluckPair(state.hand, i),
+                index: i,
+                partial: state.partial + 1,
+            })
+
+            best = Math.min(best, s)
+        }
+
+        // penchan or ryanmen
+        if (isSeq(state.hand, i, 2)) {
+            const s = extractPartial({
+                ...state,
+                hand: pluckSequence(state.hand, i, 2),
+                index: i,
+                partial: state.partial + 1,
+            })
+
+            best = Math.min(best, s)
+        }
+
+        // kanchan
+        if (i < 30 && (i % 10) < 9 && state.hand[i + 2]) {
+            const s = extractPartial({
+                ...state,
+                hand: pluckTiles(state.hand, [i, i + 2]),
+                index: i,
+                partial: state.partial + 1,
+            })
+
+            best = Math.min(best, s)
+        }
     }
 
-    return toResult(state)
+    return calc(state)
 }
-
-// let temp = Array.from({ length: 38 }).fill(0)
-
-// temp[1] = 3
-// temp[2] = 3
-// temp[3] = 3
-
-// temp
