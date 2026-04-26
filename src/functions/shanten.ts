@@ -1,7 +1,7 @@
 import { pluckPair, pluckSequence, pluckTriplet } from "./pluck";
 
 
-type ShantenInput = {
+type ShantenState = {
     hand: number[];
     index: number;
     pair: 0 | 1;
@@ -9,14 +9,14 @@ type ShantenInput = {
     partial: number;
 }
 
-export function shanten(input: ShantenInput) {
+export function shanten(state: ShantenState) {
     let result = 8
 
-    for (let i = input.index; i < input.hand.length; i++) {
-        if (input.hand[i] > 1) {
+    for (let i = state.index; i < state.hand.length; i++) {
+        if (state.hand[i] > 1) {
             const s = extractComplete({
-                ...input,
-                hand: pluckPair(input.hand, i),
+                ...state,
+                hand: pluckPair(state.hand, i),
                 pair: 1,
             })
 
@@ -37,38 +37,49 @@ function isSeq(hand: number[], i: number) {
     return true
 }
 
-function extractComplete(input: ShantenInput) {
-    for (let i = input.index; i < input.hand.length; i++) {
-        if (input.hand[i] > 2) {
+function extractComplete(state: ShantenState) {
+    for (let i = state.index; i < state.hand.length; i++) {
+        if (state.hand[i] > 2) {
             return extractComplete({
-                ...input,
-                hand: pluckTriplet(input.hand, i),
+                ...state,
+                hand: pluckTriplet(state.hand, i),
                 index: i,
-                complete: input.complete + 1,
+                complete: state.complete + 1,
             })
         }
 
-        if (isSeq(input.hand, i)) {
+        if (isSeq(state.hand, i)) {
             return extractComplete({
-                ...input,
-                hand: pluckSequence(input.hand, i),
+                ...state,
+                hand: pluckSequence(state.hand, i),
                 index: i,
-                complete: input.complete + 1,
+                complete: state.complete + 1,
             })
         }
     }
 
     return extractPartial({
-        ...input,
+        ...state,
         index: 0,
     })
 }
 
-function extractPartial(input: ShantenInput) {
-    for (let i = input.index; i < input.hand.length; i++) {
+function toResult({ pair, complete, partial }: ShantenState) {
+    return 8 - (complete * 2) - partial - pair
+}
+
+function extractPartial(state: ShantenState) {
+    for (let i = state.index; i < state.hand.length; i++) {
         // extract partial groups here
     }
 
-    //// let currentShanten = 8 - (completeSets * 2) - partialSets - pair;
-    const result = 999
+    return toResult(state)
 }
+
+// let temp = Array.from({ length: 38 }).fill(0)
+
+// temp[1] = 3
+// temp[2] = 3
+// temp[3] = 3
+
+// temp
