@@ -1,4 +1,3 @@
-import { generateArray } from '@dowhileluke/fns';
 import { pluckPair, pluckSequence, pluckTiles, pluckTriplet } from './pluck'
 
 type ShantenState = {
@@ -39,7 +38,7 @@ export function shanten(hand: number[]) {
 }
 
 function isSeq(hand: number[], i: number, length = 3) {
-    return i < 30 && hand.slice(i, i + length - 1).every(n => n)
+    return i < 30 && hand.slice(i, i + length).every(n => n)
 }
 
 function extractComplete(state: ShantenState) {
