@@ -82,8 +82,6 @@ function calc({ pair, complete, partial }: ShantenState) {
     if (pair && (complete + partial + pair) > 4) {
         result -= 1
     }
-
-    if (result < 2) console.log({ pair, complete, partial })
     
     return result
 }
