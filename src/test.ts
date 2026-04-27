@@ -1,6 +1,6 @@
 import { generateArray } from "@dowhileluke/fns"
 import { shanten } from "./functions/shanten"
-import { multiUkeire, ukeire } from "./functions/ukeire"
+import { groupedUke, multiUkeire, ukeire } from "./functions/ukeire"
 
 const emptyHand = generateArray(38).fill(0)
 
@@ -23,7 +23,8 @@ export function runTest() {
     // try without 2p
     // console.log(ukeire(addTiles(emptyHand, [3, 3, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
     // try multi with 2p
-    console.log(multiUkeire(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
+    // console.log(multiUkeire(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
+    console.log(groupedUke(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
 }
 
 function addTiles(hand: number[], indexes: number[]) {
