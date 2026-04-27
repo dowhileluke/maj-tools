@@ -6,10 +6,12 @@ import { Modal } from './modal'
 import { ScoreTable } from './score-table'
 import { DualPanel } from './dual-panel'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
-import { CompassRose, IconProps, List, Table } from '@phosphor-icons/react'
+import { CompassRose, IconProps, List, SubtractSquare, Table } from '@phosphor-icons/react'
 import { Button } from './button'
 import { Comparison } from './comparison'
 import { Conditions } from './conditions'
+import { DiscardDisplay } from './discard-display'
+import { DiscardControls } from './discard-controls'
 
 export function App1() {
 	const [{ isLightMode, isMenuOpen }, { setIsMenuOpen }] = useAppState()
@@ -61,6 +63,10 @@ export function App() {
 					<Conditions />
 					<Comparison />
 				</TabPanel>
+				<TabPanel as={DualPanel} expand="above" className="gap-4">
+					<DiscardDisplay />
+					<DiscardControls />
+				</TabPanel>
 			</TabPanels>
 			<TabList as="nav" className="shrink-0 bg-mangan text-sm p-1 pr-inset-1 pb-inset-1 gap-2 flex justify-center condensed:flex-col lg:order-first">
 				<Tab className={tabStyle}>
@@ -70,6 +76,10 @@ export function App() {
 				<Tab className={tabStyle}>
 					<CompassRose {...iconProps} />
 					<span className="condensed:hidden">Compare</span>
+				</Tab>
+				<Tab className={tabStyle}>
+					<SubtractSquare {...iconProps} />
+					<span className="condensed:hidden">Discards</span>
 				</Tab>
 				<Button className={tabStyle} onClick={() => setIsMenuOpen(true)}>
 					<List {...iconProps} />
