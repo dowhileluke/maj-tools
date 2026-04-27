@@ -3,7 +3,7 @@ import { pluckPair, pluckSequence, pluckTiles, pluckTriplet } from './pluck'
 type ShantenState = {
     hand: number[];
     index: number;
-    pair: 0 | 1;
+    pair: number;
     complete: number;
     partial: number;
 }
@@ -77,7 +77,15 @@ function extractComplete(state: ShantenState) {
 }
 
 function calc({ pair, complete, partial }: ShantenState) {
-    return 8 - (complete * 2) - partial - pair
+    let result = 8 - (complete * 2) - Math.min(partial + pair, 4 - complete)
+
+    if (pair && (complete + partial + pair) > 4) {
+        result -= 1
+    }
+
+    if (result < 2) console.log({ pair, complete, partial })
+    
+    return result
 }
 
 function extractPartial(state: ShantenState) {
@@ -96,7 +104,7 @@ function extractPartial(state: ShantenState) {
                 ...state,
                 hand: pluckPair(state.hand, i),
                 index: i,
-                partial: state.partial + 1,
+                pair: state.pair + 1,
             })
 
             best = Math.min(best, s)
@@ -127,5 +135,7 @@ function extractPartial(state: ShantenState) {
         }
     }
 
-    return calc(state)
+    let s = calc(state)
+
+    return Math.min(best, s)
 }
