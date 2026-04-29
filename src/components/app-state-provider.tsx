@@ -16,7 +16,16 @@ const initialState: AppState = {
 	repeatCount: 0,
 	leftoverCount: 0,
 	isSimpleFu: false,
+	tiles: [],
 	...getPersistedState(),
+}
+
+function removeAtIndex<T>(list: T[], index: number) {
+	if (index < 0) {
+		return list.slice(0, -1)
+	}
+
+	return list.filter((_, i) => i !== index)
 }
 
 function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
@@ -71,6 +80,18 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 		},
 		setIsSimpleFu(isSimpleFu) {
 			setState(prev => ({ ...prev, isSimpleFu, }))
+		},
+		addTile(n) {
+			setState(prev => ({ ...prev, tiles: prev.tiles.concat(n), }))
+		},
+		removeTile(n) {
+			setState(prev => ({
+				...prev,
+				tiles: removeAtIndex(prev.tiles, prev.tiles.indexOf(n)),
+			}))
+		},
+		resetTiles() {
+			setState(prev => ({ ...prev, tiles: [], }))
 		},
 	}
 
