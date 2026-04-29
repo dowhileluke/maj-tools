@@ -2,7 +2,7 @@ import { generateArray } from '@dowhileluke/fns'
 import { useAppState } from '../hooks/use-app-state';
 import { TileList } from './tile-list';
 import { Tile } from './tile';
-import { Backspace } from '@phosphor-icons/react';
+import { Backspace, Trash } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
 type DiscardInputProps = {
@@ -25,9 +25,10 @@ export function DiscardInput({ hand }: DiscardInputProps) {
     const [state, actions] = useAppState()
     const selection = useMemo(() => sort(state.tiles).concat(emptySelection).slice(0, 14), [state.tiles])
 
-    function toList(g: number[]) {
+    function toList(g: number[], i?: number) {
         return (
             <TileList
+                key={i}
                 tiles={g}
                 onClick={n => actions.addTile(n)}
                 isDisabled={n => hand[n] > 3 || state.tiles.length > 13}
@@ -41,7 +42,7 @@ export function DiscardInput({ hand }: DiscardInputProps) {
             <div className="flex-center flex-col gap-1">
                 <div className="flex-center gap-1">
                     {toList(jihai)}
-                    <Tile n={0} />
+                    <Tile n={0} className="invisible" />
                     <Tile n={39} onClick={() => actions.removeTile(-1)}>
                         <Backspace size="1em" />
                     </Tile>

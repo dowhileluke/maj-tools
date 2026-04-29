@@ -31,7 +31,7 @@ export function Tile({ n, size = 'md', className, children, ...rest }: TileProps
 
     if (rank === 0) {
         return (
-            <div className={concat(emptyStyle, sizeMap[size])}>
+            <div className={concat(emptyStyle, sizeMap[size], className)}>
                 {children}
             </div>
         )
