@@ -9,6 +9,8 @@ type ShantenState = {
 }
 
 export function shanten(hand: number[]) {
+    console.count('shanten')
+
     const init: ShantenState = {
         hand,
         index: 1,

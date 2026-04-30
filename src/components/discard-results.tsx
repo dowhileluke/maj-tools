@@ -29,6 +29,9 @@ export function DiscardResults({ hand }: DiscardResultProps) {
     const results = useMemo(() => {
         if (len < 13) return null
 
+        console.countReset('shanten')
+        console.countReset('ukeire')
+
         const shanten = shantenFn(hand)
         const groups = groupedUke(hand, shanten) as Ukeire[]
         const ukeOutcomes = organize(groups)

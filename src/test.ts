@@ -24,15 +24,6 @@ export function runTest() {
     // console.log(ukeire(addTiles(emptyHand, [3, 3, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
     // try multi with 2p
     // console.log(multiUkeire(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
-    console.log(groupedUke(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
-}
-
-function addTiles(hand: number[], indexes: number[]) {
-    const result = [...hand]
-
-    for (const i of indexes) {
-        result[i] += 1
-    }
-
-    return result
+    // console.log(groupedUke(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
+    console.info('skipping tests')
 }

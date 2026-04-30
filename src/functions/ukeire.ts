@@ -1,18 +1,14 @@
 import { pluckTiles } from './pluck'
+import { putTiles } from './put'
 import { shanten } from './shanten'
 
 export type Ukeire = [number, number[]]
 export type GroupedUke = [number, number[], number, number[], number[]]
 
-function addTile(hand: number[], index: number) {
-    const result = [...hand]
-
-    result[index] += 1
-
-    return result
-}
-
+// hand = 13 wide
 export function ukeire(hand: number[], wall?: number[], baseline?: number) {
+    console.count('ukeire')
+
     if (!wall) {
         wall = hand.map(n => 4 - n)
     }
@@ -29,7 +25,7 @@ export function ukeire(hand: number[], wall?: number[], baseline?: number) {
 
         if (i % 10 === 0 || !available) continue
 
-        const considered = shanten(addTile(hand, i))
+        const considered = shanten(putTiles(hand, [i]))
 
         if (considered < baseline) {
             uke += available
@@ -40,6 +36,7 @@ export function ukeire(hand: number[], wall?: number[], baseline?: number) {
     return [uke, tiles] as Ukeire
 }
 
+// hand = 14 wide
 export function multiUkeire(hand: number[], wall?: number[], baseline?: number) {
     if (!wall) {
         wall = hand.map(n => 4 - n)
@@ -66,6 +63,8 @@ export function groupedUke(hand: number[], baseline?: number) {
     const wall = hand.map(n => 4 - n)
     const ukeList = multiUkeire(hand, wall, baseline)
 
+    // return ukeList
+
     // not iishanten
     if (baseline !== 1) return ukeList
 
@@ -77,7 +76,7 @@ export function groupedUke(hand: number[], baseline?: number) {
         const few: number[] = []
 
         for (const t of tiles) {
-            const nextHand = addTile(pluckTiles(hand, [i]), t)
+            const nextHand = putTiles(pluckTiles(hand, [i]), [t])
             const [waits] = ukeire(nextHand, wall, 0)
 
             if (waits > 4) {
