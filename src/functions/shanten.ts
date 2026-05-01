@@ -8,9 +8,7 @@ type ShantenState = {
     partial: number;
 }
 
-export function shanten(hand: number[]) {
-    console.count('shanten')
-
+export function shanten(hand: number[], minimum = 8) {
     const init: ShantenState = {
         hand,
         index: 1,
@@ -27,14 +25,14 @@ export function shanten(hand: number[]) {
                 ...init,
                 hand: pluckPair(hand, i),
                 pair: 1,
-            })
+            }, minimum)
 
             best = Math.min(best, s)
         }
     }
 
     // try without a pair
-    const s = extractComplete(init)
+    const s = extractComplete(init, minimum)
 
     return Math.min(best, s)
 }
@@ -43,7 +41,7 @@ function isSeq(hand: number[], i: number, length = 3) {
     return i < 30 && hand.slice(i, i + length).every(n => n)
 }
 
-function extractComplete(state: ShantenState) {
+function extractComplete(state: ShantenState, minimum: number) {
     let best = 8
 
     for (let i = state.index; i < state.hand.length; i++) {
@@ -53,7 +51,7 @@ function extractComplete(state: ShantenState) {
                 hand: pluckTriplet(state.hand, i),
                 index: i,
                 complete: state.complete + 1,
-            })
+            }, minimum)
 
             best = Math.min(best, s)
         }
@@ -64,11 +62,13 @@ function extractComplete(state: ShantenState) {
                 hand: pluckSequence(state.hand, i),
                 index: i,
                 complete: state.complete + 1,
-            })
+            }, minimum)
 
             best = Math.min(best, s)
         }
     }
+
+    if (minimum + state.complete < 3) return best
 
     const s = extractPartial({
         ...state,
@@ -89,8 +89,6 @@ function calc({ pair, complete, partial }: ShantenState) {
 }
 
 function extractPartial(state: ShantenState) {
-    // could probably short-circuit here with a large partial count
-
     let best = 8
 
     for (let i = state.index; i < state.hand.length; i++) {

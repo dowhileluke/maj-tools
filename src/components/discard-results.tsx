@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import { shanten as shantenFn } from "../functions/shanten";
-import { useAppState } from "../hooks/use-app-state";
-import { groupedUke, MultiUke, Ukeire } from "../functions/ukeire";
-import { Tile } from "./tile";
-import { TileList } from "./tile-list";
+import { useMemo } from 'react'
+import { shanten as shantenFn } from '../functions/shanten'
+import { useAppState } from '../hooks/use-app-state'
+import { groupedUke, MultiUke } from '../functions/ukeire'
+import { Tile } from './tile'
+import { TileList } from './tile-list'
 
 type DiscardResultProps = {
     hand: number[];
@@ -21,9 +21,6 @@ export function DiscardResults({ hand }: DiscardResultProps) {
     const results = useMemo(() => {
         if (len < 13) return null
 
-        console.countReset('shanten')
-        console.countReset('ukeire')
-
         const shanten = shantenFn(hand)
         const groups = groupedUke(hand, shanten)
         const ukeOutcomes = groups.sort((a, b) => b.count - a.count)
@@ -40,7 +37,7 @@ export function DiscardResults({ hand }: DiscardResultProps) {
         <div className="flex-center flex-col gap-1">
             {results.ukeOutcomes.map(({ t, count, tiles }) => (
                 <div key={t} className="flex justify-between">
-                    <Tile n={t} />
+                    <Tile t={t} />
                     <div>{count}</div>
                     <TileList size="sm" tiles={tiles} />
                 </div>

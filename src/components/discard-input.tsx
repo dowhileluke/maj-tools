@@ -42,8 +42,8 @@ export function DiscardInput({ hand }: DiscardInputProps) {
             <div className="flex-center flex-col gap-1">
                 <div className="flex-center gap-1">
                     {toList(jihai)}
-                    <Tile n={0} className="invisible" />
-                    <Tile n={39} onClick={() => actions.removeTile(-1)}>
+                    <Tile t={0} className="invisible" />
+                    <Tile t={39} onClick={() => actions.removeTile(-1)}>
                         <Backspace size="1em" />
                     </Tile>
                 </div>

@@ -101,7 +101,7 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 export function AppStateProvider({ children }: PropsWithChildren) {
 	const [state, setState] = useState(initialState)
 	const [actions] = useState(() => bindActions(setState))
-	const { isLightMode, scores } = state
+	const { isLightMode, scores, dealerIndex, tiles } = state
 
 	useEffect(() => {
 		document.documentElement.classList.toggle('light', isLightMode)
@@ -109,8 +109,8 @@ export function AppStateProvider({ children }: PropsWithChildren) {
 	
 
 	useEffect(() => {
-		setPersistedState({ isLightMode, scores })
-	}, [isLightMode, scores])
+		setPersistedState({ isLightMode, scores, dealerIndex, tiles })
+	}, [isLightMode, scores, dealerIndex, tiles])
 
 	return (
 		<AppContext value={[state, actions]}>

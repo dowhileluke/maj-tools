@@ -23,8 +23,6 @@ const THIRTY_EIGHT = generateArray(38)
 
 // hand = 13 tiles
 export function ukeire(hand: number[], wall?: number[], baseline?: number, tiles?: number[]) {
-    console.count('ukeire')
-
     if (!wall) {
         wall = hand.map(n => 4 - n)
     }
@@ -48,7 +46,7 @@ export function ukeire(hand: number[], wall?: number[], baseline?: number, tiles
 
         if (t % 10 === 0 || !available) continue
 
-        const considered = shanten(putTiles(hand, [t]))
+        const considered = shanten(putTiles(hand, [t]), baseline - 1)
 
         if (considered < baseline) {
             result.count += available

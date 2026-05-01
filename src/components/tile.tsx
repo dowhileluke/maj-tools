@@ -4,7 +4,7 @@ import { concat } from '../functions/concat';
 export type TileSize = 'sm' | 'md'
 
 type TileProps = {
-    n: number;
+    t: number;
     size?: TileSize;
 }
 
@@ -26,8 +26,8 @@ const dragonColor: Record<number, string> = {
 
 const honorLabels = '?ESWNHGR'
 
-export function Tile({ n, size = 'md', className, children, ...rest }: TileProps & ComponentPropsWithRef<'button'>) {
-    const rank = n % 10
+export function Tile({ t, size = 'md', className, children, ...rest }: TileProps & ComponentPropsWithRef<'button'>) {
+    const rank = t % 10
 
     if (rank === 0) {
         return (
@@ -37,8 +37,8 @@ export function Tile({ n, size = 'md', className, children, ...rest }: TileProps
         )
     }
 
-    const label = children || (n > 30 ? honorLabels.charAt(rank) : rank)
-    const color = dragonColor[n] || baseColor[Math.floor(n / 10)]
+    const label = children || (t > 30 ? honorLabels.charAt(rank) : rank)
+    const color = dragonColor[t] || baseColor[Math.floor(t / 10)]
 
     return (
         <button className={concat(primaryStyle, sizeMap[size], color, className)} {...rest}>
