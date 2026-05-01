@@ -1,12 +1,28 @@
+import { generateArray } from '@dowhileluke/fns';
 import { pluckTiles } from './pluck'
 import { putTiles } from './put'
 import { shanten } from './shanten'
 
-export type Ukeire = [number, number[]]
-export type GroupedUke = [number, number[], number, number[], number[]]
+export type Ukeire = {
+    count: number;
+    tiles: number[];
+}
 
-// hand = 13 wide
-export function ukeire(hand: number[], wall?: number[], baseline?: number) {
+export type MultiUke = Ukeire & {
+    t: number;
+}
+
+// adds data for [Good Tiles/Accepted]
+export type AdvancedUke = MultiUke & {
+    prefCount: number;
+    preferred: number[];
+    remaining: number[];
+}
+
+const THIRTY_EIGHT = generateArray(38)
+
+// hand = 13 tiles
+export function ukeire(hand: number[], wall?: number[], baseline?: number, tiles?: number[]) {
     console.count('ukeire')
 
     if (!wall) {
@@ -17,27 +33,34 @@ export function ukeire(hand: number[], wall?: number[], baseline?: number) {
         baseline = shanten(hand)
     }
 
-    let uke = 0
-    let tiles: number[] = []
+    // configurable tiles to test
+    if (!tiles) {
+        tiles = THIRTY_EIGHT // all of them
+    }
 
-    for (let i = 0; i < wall.length; i++) {
-        const available = wall[i]
+    const result: Ukeire = {
+        count: 0,
+        tiles: [],
+    }
 
-        if (i % 10 === 0 || !available) continue
+    for (const t of tiles) {
+        const available = wall[t]
 
-        const considered = shanten(putTiles(hand, [i]))
+        if (t % 10 === 0 || !available) continue
+
+        const considered = shanten(putTiles(hand, [t]))
 
         if (considered < baseline) {
-            uke += available
-            tiles.push(i)
+            result.count += available
+            result.tiles.push(t)
         }
     }
 
-    return [uke, tiles] as Ukeire
+    return result
 }
 
 // hand = 14 wide
-export function multiUkeire(hand: number[], wall?: number[], baseline?: number) {
+export function multiUkeire(hand: number[], wall?: number[], baseline?: number, tiles?: number[]) {
     if (!wall) {
         wall = hand.map(n => 4 - n)
     }
@@ -46,15 +69,52 @@ export function multiUkeire(hand: number[], wall?: number[], baseline?: number) 
         baseline = shanten(hand)
     }
 
-    return hand.map((n, i): Ukeire => {
-        if (i % 10 === 0 || n < 1) {
-            return [0, []]
-        }
+    const result: MultiUke[] = []
 
-        return ukeire(pluckTiles(hand, [i]), wall, baseline)
-    })
+    for (const [t, n] of hand.entries()) {
+        if (t % 10 === 0 || n < 1) continue
+
+        const uke = ukeire(pluckTiles(hand, [t]), wall, baseline, tiles)
+
+        if (uke.count) {
+            result.push({ ...uke, t, })
+        }
+    }
+
+    return result
 }
 
+// hand = 14 tiles
+export function advancedUke(hand: number[], wall: number[], uke: MultiUke) {
+    const baseHand = pluckTiles(hand, [uke.t])
+
+    let prefCount = 0
+    const preferred: number[] = []
+    const remaining: number[] = []
+
+    for (const t of uke.tiles) {
+        const tenpaiHand = putTiles(baseHand, [t])
+        const tenpaiForms = multiUkeire(tenpaiHand, wall, 0, uke.tiles)
+
+        if (tenpaiForms.some(f => f.count > 4)) {
+            prefCount += wall[t]
+            preferred.push(t)
+        } else {
+            remaining.push(t)
+        }
+    }
+
+    const result: AdvancedUke = {
+        ...uke,
+        prefCount,
+        preferred,
+        remaining,
+    }
+
+    return result
+}
+
+// hand = 14 tiles
 export function groupedUke(hand: number[], baseline?: number) {
     if (typeof baseline === 'undefined') {
         baseline = shanten(hand)
@@ -63,30 +123,8 @@ export function groupedUke(hand: number[], baseline?: number) {
     const wall = hand.map(n => 4 - n)
     const ukeList = multiUkeire(hand, wall, baseline)
 
-    // return ukeList
-
     // not iishanten
     if (baseline !== 1) return ukeList
 
-    return ukeList.map(([n, tiles], i): GroupedUke => {
-        if (tiles.length < 1) return [0, [], 0, [], []]
-
-        let m = 0
-        const many: number[] = []
-        const few: number[] = []
-
-        for (const t of tiles) {
-            const nextHand = putTiles(pluckTiles(hand, [i]), [t])
-            const [waits] = ukeire(nextHand, wall, 0)
-
-            if (waits > 4) {
-                m += wall[t]
-                many.push(t)
-            } else {
-                few.push(t)
-            }
-        }
-
-        return [n, tiles, m, many, few]
-    })
+    return ukeList.map(uke => advancedUke(hand, wall, uke))
 }

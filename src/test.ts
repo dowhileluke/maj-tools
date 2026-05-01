@@ -1,6 +1,8 @@
 import { generateArray } from "@dowhileluke/fns"
 import { shanten } from "./functions/shanten"
-import { groupedUke, multiUkeire, ukeire } from "./functions/ukeire"
+import { advancedUke, groupedUke, multiUkeire, ukeire } from "./functions/ukeire"
+import { putTiles } from "./functions/put"
+import { pluckTiles } from "./functions/pluck"
 
 const emptyHand = generateArray(38).fill(0)
 
@@ -24,6 +26,34 @@ export function runTest() {
     // console.log(ukeire(addTiles(emptyHand, [3, 3, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
     // try multi with 2p
     // console.log(multiUkeire(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
-    // console.log(groupedUke(addTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])))
-    console.info('skipping tests')
+    // console.log(groupedUke())
+
+    const testHand = putTiles(emptyHand, [3, 3, 12, 12, 13, 16, 17, 17, 18, 18, 18, 24, 25, 26])
+
+    // const [, uke1] = multiUkeire(testHand)
+
+    // console.log('uke1', uke1)
+
+    // const discard = pluckTiles(testHand, [uke1.t])
+    // const improved = putTiles(discard, [uke1.tiles[0]])
+
+    // console.log('improved', improved)
+
+    // console.log(multiUkeire(improved, undefined, undefined, uke1.tiles))
+
+
+    // const asdf = uke1.tiles.map(t => {
+    //     const improved = putTiles(discard, [t])
+
+    //     const waits = multiUkeire(improved, undefined, 0, uke1.tiles)
+
+    //     return [t, waits]
+    // })
+
+    // console.log(uke1)
+    // console.log(asdf)
+
+    console.log(groupedUke(testHand))
+
+    // console.info('skipping tests')
 }
