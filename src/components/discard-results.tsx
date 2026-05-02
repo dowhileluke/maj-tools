@@ -15,7 +15,7 @@ type Results = {
 }
 
 export function DiscardResults({ hand }: DiscardResultProps) {
-    const [state] = useAppState()
+    const [state, actions] = useAppState()
     const len = state.tiles.length
 
     const results = useMemo(() => {
@@ -39,7 +39,14 @@ export function DiscardResults({ hand }: DiscardResultProps) {
                 <div key={t} className="flex justify-between">
                     <Tile t={t} />
                     <div>{count}</div>
-                    <TileList size="sm" tiles={tiles} />
+                    <TileList
+                        size="sm"
+                        tiles={tiles}
+                        onClick={(upgrade) => {
+                            actions.removeTile(t)
+                            actions.addTile(upgrade)
+                        }}
+                    />
                 </div>
             ))}
         </div>

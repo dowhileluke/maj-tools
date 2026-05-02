@@ -3,8 +3,8 @@ import { Tile, TileSize } from './tile'
 type TileListProps = {
     tiles: number[];
     size?: TileSize;
-    onClick?: (n: number) => void;
-    isDisabled?: (n: number) => boolean;
+    onClick?: (t: number) => void;
+    isDisabled?: (t: number) => boolean;
 }
 
 export function TileList({ tiles, size, onClick, isDisabled }: TileListProps) {
