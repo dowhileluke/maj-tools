@@ -9,13 +9,13 @@ export type Ukeire = {
 }
 
 export type MultiUke = Ukeire & {
-    t: number;
+    discards: number[];
 }
 
 // adds data for [Good Tiles/Accepted]
 export type AdvancedUke = MultiUke & {
-    prefCount: number;
-    preferred: number[];
+    goodCount: number;
+    goodTiles: number[];
     remaining: number[];
 }
 
@@ -58,7 +58,7 @@ export function ukeire(hand: number[], wall?: number[], baseline?: number, tiles
 }
 
 // hand = 14 wide
-export function multiUkeire(hand: number[], wall?: number[], baseline?: number, tiles?: number[]) {
+export function multiUkeire(hand: number[], wall?: number[], baseline?: number, eligibleTiles?: number[]) {
     if (!wall) {
         wall = hand.map(n => 4 - n)
     }
@@ -67,27 +67,36 @@ export function multiUkeire(hand: number[], wall?: number[], baseline?: number, 
         baseline = shanten(hand)
     }
 
-    const result: MultiUke[] = []
+    const keys: string[] = []
+    const results: Record<string, MultiUke> = {}
 
     for (const [t, n] of hand.entries()) {
         if (t % 10 === 0 || n < 1) continue
 
-        const uke = ukeire(pluckTiles(hand, [t]), wall, baseline, tiles)
+        const { count, tiles } = ukeire(pluckTiles(hand, [t]), wall, baseline, eligibleTiles)
 
-        if (uke.count) {
-            result.push({ ...uke, t, })
+        if (count) {
+            const k = tiles.join(',')
+            const seen = results[k]
+
+            if (!seen) {
+                results[k] = { discards: [t], count, tiles }
+                keys.push(k)
+            } else {
+                seen.discards.push(t)
+            }
         }
     }
 
-    return result
+    return keys.map(k => results[k])
 }
 
 // hand = 14 tiles
 export function advancedUke(hand: number[], wall: number[], uke: MultiUke) {
-    const baseHand = pluckTiles(hand, [uke.t])
+    const baseHand = pluckTiles(hand, [uke.discards[0]])
 
-    let prefCount = 0
-    const preferred: number[] = []
+    let goodCount = 0
+    const goodTiles: number[] = []
     const remaining: number[] = []
 
     for (const t of uke.tiles) {
@@ -95,8 +104,8 @@ export function advancedUke(hand: number[], wall: number[], uke: MultiUke) {
         const tenpaiForms = multiUkeire(tenpaiHand, wall, 0, uke.tiles)
 
         if (tenpaiForms.some(f => f.count > 4)) {
-            prefCount += wall[t]
-            preferred.push(t)
+            goodCount += wall[t]
+            goodTiles.push(t)
         } else {
             remaining.push(t)
         }
@@ -104,8 +113,8 @@ export function advancedUke(hand: number[], wall: number[], uke: MultiUke) {
 
     const result: AdvancedUke = {
         ...uke,
-        prefCount,
-        preferred,
+        goodCount,
+        goodTiles,
         remaining,
     }
 

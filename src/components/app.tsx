@@ -28,11 +28,12 @@ export function App() {
 
 	return (
 		<TabGroup
-		className={concat(
-			'flex flex-col condensed:flex-row',
-			'w-full h-full overflow-hidden',
-			isModalOpen && 'blur-sm',
-		)}>
+			className={concat(
+				'flex flex-col condensed:flex-row',
+				'w-full h-full overflow-hidden',
+				isModalOpen && 'blur-sm',
+			)}
+		>
 			<div className="shrink-0 pr-inset-0" />
 			<TabPanels as="div" className="grow p-3 pb-inset-3 overflow-hidden">
 				<TabPanel className="flex flex-col justify-center items-center h-full overflow-hidden">
@@ -45,7 +46,7 @@ export function App() {
 					<Conditions />
 					<Comparison />
 				</TabPanel>
-				<TabPanel as={DualPanel} expand="above" className="gap-4">
+				<TabPanel as={DualPanel} expand="above" className="gap-4 overflow-hidden">
 					<DiscardResults hand={hand} />
 					<DiscardInput hand={hand} />
 				</TabPanel>
