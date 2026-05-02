@@ -2,7 +2,7 @@ import { generateArray } from '@dowhileluke/fns'
 import { useAppState } from '../hooks/use-app-state';
 import { TileList } from './tile-list';
 import { Tile } from './tile';
-import { Backspace, Trash } from '@phosphor-icons/react';
+import { Backspace } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
 type DiscardInputProps = {

@@ -10,7 +10,7 @@ type TileProps = {
 
 const baseStyle = 'font-bold border rounded-sm disabled:opacity-50'
 const emptyStyle = concat(baseStyle, 'border-dashed border-fore')
-const primaryStyle = concat(baseStyle, 'flex-center bg-white border-neutral-800 cursor-pointer')
+const primaryStyle = concat(baseStyle, 'flex-center bg-white border-neutral-800')
 
 const sizeMap: Record<TileSize, string> = {
     sm: 'w-5 h-6',
@@ -26,7 +26,7 @@ const dragonColor: Record<number, string> = {
 
 const honorLabels = '?ESWNHGR'
 
-export function Tile({ t, size = 'md', className, children, ...rest }: TileProps & ComponentPropsWithRef<'button'>) {
+export function Tile({ t, size = 'md', className, children, ...props }: TileProps & ComponentPropsWithRef<'button'>) {
     const rank = t % 10
 
     if (rank === 0) {
@@ -39,9 +39,10 @@ export function Tile({ t, size = 'md', className, children, ...rest }: TileProps
 
     const label = children || (t > 30 ? honorLabels.charAt(rank) : rank)
     const color = dragonColor[t] || baseColor[Math.floor(t / 10)]
+    const cursor = props.onClick && !props.disabled && 'cursor-pointer'
 
     return (
-        <button className={concat(primaryStyle, sizeMap[size], color, className)} {...rest}>
+        <button className={concat(primaryStyle, sizeMap[size], color, className, cursor)} {...props}>
             {label}
         </button>
     )

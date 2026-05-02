@@ -8,6 +8,10 @@ type TileListProps = {
 }
 
 export function TileList({ tiles, size, onClick, isDisabled }: TileListProps) {
+    function getHandler(t: number) {
+        if (onClick) return () => onClick(t)
+    }
+
     return (
         <div className="flex-center gap-1">
             {tiles.map((t, i) => (
@@ -15,7 +19,7 @@ export function TileList({ tiles, size, onClick, isDisabled }: TileListProps) {
                     key={i}
                     t={t}
                     size={size}
-                    onClick={() => onClick?.(t)}
+                    onClick={getHandler(t)}
                     disabled={isDisabled?.(t)}
                 />
             ))}

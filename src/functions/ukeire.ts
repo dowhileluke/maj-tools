@@ -1,4 +1,4 @@
-import { generateArray } from '@dowhileluke/fns';
+import { generateArray } from '@dowhileluke/fns'
 import { pluckTiles } from './pluck'
 import { putTiles } from './put'
 import { shanten } from './shanten'

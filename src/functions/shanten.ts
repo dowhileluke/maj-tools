@@ -9,6 +9,19 @@ type ShantenState = {
 }
 
 export function shanten(hand: number[], minimum = 8) {
+    return Math.min(
+        chiitoiShanten(hand),
+        standardShanten(hand, minimum)
+    )
+}
+
+function chiitoiShanten(hand: number[]) {
+    const pairs = hand.filter(t => t > 1).length
+
+    return 6 - pairs
+}
+
+function standardShanten(hand: number[], minimum: number) {
     const init: ShantenState = {
         hand,
         index: 1,
