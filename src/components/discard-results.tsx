@@ -29,6 +29,13 @@ function ensure(tiles: number[]) {
     return tiles
 }
 
+function named(shanten: number) {
+    if (shanten === -1) return 'Complete'
+    if (shanten === 0) return 'Tenpai'
+
+    return `${shanten}-shanten`
+}
+
 export function DiscardResults({ hand }: DiscardResultProps) {
     const [state] = useAppState()
     const len = state.tiles.length
@@ -75,47 +82,57 @@ export function DiscardResults({ hand }: DiscardResultProps) {
         )
     }
 
+    const head = (
+        <div className="text-center pb-4">
+            {named(results.shanten)}
+        </div>
+    )
+
     if (results.mode === '13') {
         return (
-            <div>
+            <div className="flex-center flex-col">
+                {head}
                 <TileList size="sm" tiles={results.ukeire.tiles} />
             </div>
         )
     }
 
     return (
-        <div className="grid justify-center items-center overflow-auto">
-            <div className="grid grid-cols-[auto_auto_auto] gap-x-4 gap-y-1">
-                {results.ukeire.map(({ discards, count, tiles }, i) => (
-                    <Fragment key={discards[0]}>
-                        <TileList size="sm" justify="end" tiles={discards} />
-                        <div className="flex-center">
-                            {count}
-                            {results.mode === '14@1' && (
-                                ' (' + results.ukeire[i].goodCount + ')'
-                            )}
-                        </div>
-                        {results.mode === '14@1' ? (
-                            <div className="flex items-center gap-1">
-                                <TileList
-                                    size="sm"
-                                    tiles={ensure(results.ukeire[i].goodTiles)}
-                                />
-                                <span>&middot;</span>
-                                <TileList
-                                    size="sm"
-                                    tiles={ensure(results.ukeire[i].remaining)}
-                                />
+        <div className="grid justify-center items-center overflow-auto touch-pan-xy [&_*]:touch-pan-xy">
+            <div>
+                {head}
+                <div className="grid grid-cols-[auto_auto_auto] gap-x-4 gap-y-1">
+                    {results.ukeire.map(({ discards, count, tiles }, i) => (
+                        <Fragment key={discards[0]}>
+                            <TileList size="sm" justify="end" tiles={discards} />
+                            <div className="flex-center">
+                                {count}
+                                {results.mode === '14@1' && (
+                                    ' (' + results.ukeire[i].goodCount + ')'
+                                )}
                             </div>
-                        ) : (
-                            <TileList
-                                size="sm"
-                                justify="end"
-                                tiles={tiles}
-                            />
-                        )}
-                    </Fragment>
-                ))}
+                            {results.mode === '14@1' ? (
+                                <div className="flex items-center gap-1">
+                                    <TileList
+                                        size="sm"
+                                        tiles={ensure(results.ukeire[i].goodTiles)}
+                                    />
+                                    <span>&middot;</span>
+                                    <TileList
+                                        size="sm"
+                                        tiles={ensure(results.ukeire[i].remaining)}
+                                    />
+                                </div>
+                            ) : (
+                                <TileList
+                                    size="sm"
+                                    justify="end"
+                                    tiles={tiles}
+                                />
+                            )}
+                        </Fragment>
+                    ))}
+                </div>
             </div>
         </div>
     )
