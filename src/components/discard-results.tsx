@@ -3,6 +3,7 @@ import { shanten as shantenFn } from '../functions/shanten'
 import { useAppState } from '../hooks/use-app-state'
 import { AdvancedUke, groupedUke, MultiUke, ukeire as ukeireFn, Ukeire } from '../functions/ukeire'
 import { TileList } from './tile-list'
+import { DiscardLabel } from './discard-label'
 
 type DiscardResultProps = {
     hand: number[];
@@ -27,13 +28,6 @@ function ensure(tiles: number[]) {
     if (tiles.length < 1) return [0]
 
     return tiles
-}
-
-function named(shanten: number) {
-    if (shanten === -1) return 'Complete'
-    if (shanten === 0) return 'Tenpai'
-
-    return `${shanten}-shanten`
 }
 
 export function DiscardResults({ hand }: DiscardResultProps) {
@@ -82,25 +76,17 @@ export function DiscardResults({ hand }: DiscardResultProps) {
         )
     }
 
-    const head = (
-        <div className="text-center pb-4">
-            {named(results.shanten)}
-        </div>
-    )
-
     if (results.mode === '13') {
         return (
-            <div className="flex-center flex-col">
-                {head}
+            <DiscardLabel shanten={results.shanten}>
                 <TileList size="sm" tiles={results.ukeire.tiles} />
-            </div>
+            </DiscardLabel>
         )
     }
 
     return (
-        <div className="grid justify-center items-center overflow-auto touch-pan-xy [&_*]:touch-pan-xy">
-            <div>
-                {head}
+        <div className="grid justify-center items-center overflow-auto touch-pan-xy">
+            <DiscardLabel shanten={results.shanten}>
                 <div className="grid grid-cols-[auto_auto_auto] gap-x-4 gap-y-1">
                     {results.ukeire.map(({ discards, count, tiles }, i) => (
                         <Fragment key={discards[0]}>
@@ -133,7 +119,7 @@ export function DiscardResults({ hand }: DiscardResultProps) {
                         </Fragment>
                     ))}
                 </div>
-            </div>
+            </DiscardLabel>
         </div>
     )
 }
