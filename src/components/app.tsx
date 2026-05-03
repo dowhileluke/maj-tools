@@ -62,7 +62,7 @@ export function App() {
 				</Tab>
 				<Tab className={tabStyle}>
 					<SubtractSquare {...iconProps} />
-					<span className="condensed:hidden">Discards</span>
+					<span className="condensed:hidden">Efficiency</span>
 				</Tab>
 				<Button className={tabStyle} onClick={() => setIsMenuOpen(true)}>
 					<List {...iconProps} />
