@@ -76,10 +76,15 @@ export function DiscardResults({ hand }: DiscardResultProps) {
         )
     }
 
+    const heading = results.shanten === 0 ? 'Winning Tiles' : 'Accepted Tiles'
+
     if (results.mode === '13') {
         return (
-            <DiscardLabel className="w-full overflow-hidden" shanten={results.shanten}>
-                <TileList size="sm" wrap tiles={results.ukeire.tiles} />
+            <DiscardLabel className="size-full overflow-hidden" shanten={results.shanten}>
+                <div className="flex flex-col gap-1">
+                    <DiscardHeader>{heading}</DiscardHeader>
+                    <TileList size="sm" wrap tiles={results.ukeire.tiles} />
+                </div>
             </DiscardLabel>
         )
     }
@@ -96,7 +101,9 @@ export function DiscardResults({ hand }: DiscardResultProps) {
                 <div className="size-full overflow-auto touch-pan-xy">
                     <div className="grid grid-cols-[auto_auto_1fr] gap-x-4 gap-y-1 ">
                         <DiscardHeader>Discard</DiscardHeader>
-                        <DiscardHeader className="col-span-2">Accepted Tiles</DiscardHeader>
+                        <DiscardHeader className="col-span-2">
+                            {heading}
+                        </DiscardHeader>
                         {results.ukeire.map(({ discards, count, tiles }, i) => (
                             <Fragment key={discards[0]}>
                                 <TileList size="sm" tiles={discards} />
