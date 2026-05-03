@@ -23,7 +23,7 @@ export function DiscardLabel({ shanten, className, children, ...props }: Discard
     )
 }
 
-const headerStyle = 'text-center p-1 border-b'
+const headerStyle = 'text-center pb-1 border-b'
 
 export function DiscardHeader({ className, ...props }: ComponentPropsWithRef<'div'>) {
     return (<div className={concat(headerStyle, className)} {...props} />)

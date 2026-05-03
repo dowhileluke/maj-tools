@@ -92,8 +92,8 @@ export function DiscardResults({ hand }: DiscardResultProps) {
 
     return (
         <div className="grid justify-center items-center overflow-hidden">
-            <DiscardLabel className="w-full overflow-hidden" shanten={results.shanten}>
-                <div className="w-full overflow-auto touch-pan-xy">
+            <DiscardLabel className="size-full overflow-hidden" shanten={results.shanten}>
+                <div className="size-full overflow-auto touch-pan-xy">
                     <div className="grid grid-cols-[auto_auto_1fr] gap-x-4 gap-y-1 ">
                         <DiscardHeader>Discard</DiscardHeader>
                         <DiscardHeader className="col-span-2">Accepted Tiles</DiscardHeader>
