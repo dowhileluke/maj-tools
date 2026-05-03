@@ -1,8 +1,8 @@
-import { ReactNode } from 'react'
+import { ComponentPropsWithRef } from 'react'
+import { concat } from '../functions/concat';
 
-type DiscardLabelProps = {
+type DiscardLabelProps = ComponentPropsWithRef<'div'> & {
     shanten: number;
-    children: ReactNode;
 }
 
 function named(shanten: number) {
@@ -12,13 +12,19 @@ function named(shanten: number) {
     return `${shanten}-shanten`
 }
 
-export function DiscardLabel({ shanten, children }: DiscardLabelProps) {
+export function DiscardLabel({ shanten, className, children, ...props }: DiscardLabelProps) {
     return (
-        <div className="flex-center flex-col gap-4">
-            <div className="text-center">
+        <div className={concat('flex-center flex-col gap-4', className)} {...props}>
+            <h3 className="text-center font-bold">
                 {named(shanten)}
-            </div>
+            </h3>
             {children}
         </div>
     )
+}
+
+const headerStyle = 'text-center p-1 border-b'
+
+export function DiscardHeader({ className, ...props }: ComponentPropsWithRef<'div'>) {
+    return (<div className={concat(headerStyle, className)} {...props} />)
 }

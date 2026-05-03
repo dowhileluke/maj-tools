@@ -8,7 +8,7 @@ type TileProps = {
     size?: TileSize;
 }
 
-const baseStyle = 'font-bold border rounded-sm active:opacity-80 disabled:opacity-40'
+const baseStyle = 'shrink-0 font-bold border rounded-sm active:opacity-80 disabled:opacity-40'
 const emptyStyle = concat(baseStyle, 'border-dashed border-fore')
 const primaryStyle = concat(baseStyle, 'flex-center bg-white border-neutral-800')
 

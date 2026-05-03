@@ -3,7 +3,7 @@ import { shanten as shantenFn } from '../functions/shanten'
 import { useAppState } from '../hooks/use-app-state'
 import { AdvancedUke, groupedUke, MultiUke, ukeire as ukeireFn, Ukeire } from '../functions/ukeire'
 import { TileList } from './tile-list'
-import { DiscardLabel } from './discard-label'
+import { DiscardHeader, DiscardLabel } from './discard-label'
 
 type DiscardResultProps = {
     hand: number[];
@@ -78,46 +78,49 @@ export function DiscardResults({ hand }: DiscardResultProps) {
 
     if (results.mode === '13') {
         return (
-            <DiscardLabel shanten={results.shanten}>
-                <TileList size="sm" tiles={results.ukeire.tiles} />
+            <DiscardLabel className="w-full overflow-hidden" shanten={results.shanten}>
+                <TileList size="sm" wrap tiles={results.ukeire.tiles} />
             </DiscardLabel>
         )
     }
 
     return (
-        <div className="grid justify-center items-center overflow-auto touch-pan-xy">
-            <DiscardLabel shanten={results.shanten}>
-                <div className="grid grid-cols-[auto_auto_auto] gap-x-4 gap-y-1">
-                    {results.ukeire.map(({ discards, count, tiles }, i) => (
-                        <Fragment key={discards[0]}>
-                            <TileList size="sm" justify="end" tiles={discards} />
-                            <div className="flex-center">
-                                {count}
-                                {results.mode === '14@1' && (
-                                    ' (' + results.ukeire[i].goodCount + ')'
-                                )}
-                            </div>
-                            {results.mode === '14@1' ? (
-                                <div className="flex items-center gap-1">
-                                    <TileList
-                                        size="sm"
-                                        tiles={ensure(results.ukeire[i].goodTiles)}
-                                    />
-                                    <span>&middot;</span>
-                                    <TileList
-                                        size="sm"
-                                        tiles={ensure(results.ukeire[i].remaining)}
-                                    />
+        <div className="grid justify-center items-center overflow-hidden">
+            <DiscardLabel className="w-full overflow-hidden" shanten={results.shanten}>
+                <div className="w-full overflow-auto touch-pan-xy">
+                    <div className="grid grid-cols-[auto_auto_1fr] gap-x-4 gap-y-1 ">
+                        <DiscardHeader>Discard</DiscardHeader>
+                        <DiscardHeader className="col-span-2">Accepted Tiles</DiscardHeader>
+                        {results.ukeire.map(({ discards, count, tiles }, i) => (
+                            <Fragment key={discards[0]}>
+                                <TileList size="sm" tiles={discards} />
+                                <div className="flex-center whitespace-nowrap">
+                                    {count}
+                                    {results.mode === '14@1' && (
+                                        ' (' + results.ukeire[i].goodCount + ')'
+                                    )}
                                 </div>
-                            ) : (
-                                <TileList
-                                    size="sm"
-                                    justify="end"
-                                    tiles={tiles}
-                                />
-                            )}
-                        </Fragment>
-                    ))}
+                                {results.mode === '14@1' ? (
+                                    <div className="flex items-center gap-1">
+                                        <TileList
+                                            size="sm"
+                                            tiles={ensure(results.ukeire[i].goodTiles)}
+                                        />
+                                        <span>&middot;</span>
+                                        <TileList
+                                            size="sm"
+                                            tiles={ensure(results.ukeire[i].remaining)}
+                                        />
+                                    </div>
+                                ) : (
+                                    <TileList
+                                        size="sm"
+                                        tiles={tiles}
+                                    />
+                                )}
+                            </Fragment>
+                        ))}
+                    </div>
                 </div>
             </DiscardLabel>
         </div>
