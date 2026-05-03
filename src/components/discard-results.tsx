@@ -84,6 +84,12 @@ export function DiscardResults({ hand }: DiscardResultProps) {
         )
     }
 
+    if (results.shanten === -1) {
+        return (
+            <DiscardLabel shanten={-1} />
+        )
+    }
+
     return (
         <div className="grid justify-center items-center overflow-hidden">
             <DiscardLabel className="w-full overflow-hidden" shanten={results.shanten}>
