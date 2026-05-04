@@ -4,6 +4,7 @@ import { AppActions, AppState } from '../types'
 import { AppContext } from '../context'
 import { BG_HEX_CODE } from '../const'
 import { getPersistedState, setPersistedState } from '../functions/persist'
+import { decodeTiles } from '../functions/tile-encoding'
 
 const initialState: AppState = {
 	isDealer: false,
@@ -90,8 +91,8 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 				tiles: removeAtIndex(prev.tiles, prev.tiles.indexOf(n)),
 			}))
 		},
-		resetTiles() {
-			setState(prev => ({ ...prev, tiles: [], }))
+		setTiles(s) {
+			setState(prev => ({ ...prev, isResetting: false, tiles: decodeTiles(s), }))
 		},
 	}
 

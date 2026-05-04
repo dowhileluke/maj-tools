@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { AppStateProvider } from './components/app-state-provider'
 import { App } from './components/app'
 import './main.css'
-import { runTest } from './test'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -12,5 +11,3 @@ createRoot(document.getElementById('root')!).render(
     </AppStateProvider>
   </StrictMode>,
 )
-
-runTest()

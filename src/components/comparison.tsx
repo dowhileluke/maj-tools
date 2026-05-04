@@ -16,8 +16,8 @@ import { Toggle } from './toggle'
 
 const labels = ['POV', 'Shimocha', 'Toimen', 'Kamicha']
 
-const inputStyle = "border rounded-sm text-center w-24"
-const buttonStyle = "rounded-lg px-2 py-1 gap-1"
+const inputStyle = 'border rounded-sm text-center w-24'
+const buttonStyle = 'rounded-lg px-2 py-1 gap-1'
 const destroyStyle = concat(buttonStyle, 'bg-red-700 text-white')
 
 function signed(n: number | null) {

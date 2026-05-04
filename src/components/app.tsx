@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { generateArray } from '@dowhileluke/fns'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { CompassRose, IconProps, List, SubtractSquare, Table } from '@phosphor-icons/react'
 import { concat } from '../functions/concat'
@@ -15,8 +14,7 @@ import { Conditions } from './conditions'
 import { putTiles } from '../functions/put'
 import { DiscardInput } from './discard-input'
 import { DiscardResults } from './discard-results'
-
-const emptyHand = generateArray(38).fill(0)
+import { EMPTY_HAND } from '../const'
 
 const tabStyle = 'flex-center flex-col min-w-20 px-2 py-1 leading-none rounded-md outline-none data-[selected]:bg-back/60 condensed:p-1 condensed:min-w-auto'
 const iconProps: IconProps = { size: '1.5rem', weight: 'thin', }
@@ -24,7 +22,7 @@ const iconProps: IconProps = { size: '1.5rem', weight: 'thin', }
 export function App() {
 	const [{ isLightMode, isMenuOpen, isResetting, tiles }, { setIsMenuOpen }] = useAppState()
 	const isModalOpen = isMenuOpen || isResetting
-	const hand = useMemo(() => putTiles(emptyHand, tiles), [tiles])
+	const hand = useMemo(() => putTiles(EMPTY_HAND, tiles), [tiles])
 
 	return (
 		<TabGroup

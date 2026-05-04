@@ -74,5 +74,5 @@ export type AppActions = {
 	setIsSimpleFu: (isSimpleFu: boolean) => void;
 	addTile: (n: number) => void;
 	removeTile: (n: number) => void;
-	resetTiles: () => void;
+	setTiles: (s: string) => void;
 }
