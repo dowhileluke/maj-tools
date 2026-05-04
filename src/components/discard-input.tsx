@@ -90,8 +90,8 @@ export function DiscardInput({ hand }: DiscardInputProps) {
                     }}
                 >
                     {/* <h3 className="text-xl font-bold">Edit all scores?</h3> */}
-                    {encoded && (<div className="flex-center gap-1">
-                        <code>{encoded}</code>
+                    {encoded && (<div className="flex-center">
+                        <code className={buttonStyle}>{encoded}</code>
                         <Button className={buttonStyle} onClick={() => copyText(encoded)}>
                             <ClipboardText size="1em" />
                         </Button>
