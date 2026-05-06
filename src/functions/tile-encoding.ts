@@ -16,7 +16,7 @@ export function encodeTiles(tiles: number[]) {
     for (const [t, count] of hand.entries()) {
         const suf = suffix[t]
 
-        if (suf) {
+        if (typeof suf === 'string') {
             if (isSufActive) {
                 parts.push(suf)
             }
@@ -47,6 +47,10 @@ const suffixMod: Record<string, number> = {
     z: 30,
 }
 
+function isDigit(ch: string) {
+    return /\d/.test(ch)
+}
+
 export function decodeTiles(s: string) {
     const parts = s.split('').concat('z')
     const hand = EMPTY_HAND.slice()
@@ -66,10 +70,8 @@ export function decodeTiles(s: string) {
 
             buffer = []
         } else {
-            const n = Number(ch)
-
-            if (!Number.isNaN(n)) {
-                buffer.push(n || 5)
+            if (isDigit(ch)) {
+                buffer.push(Number(ch) || 5)
             }
         }
     }
