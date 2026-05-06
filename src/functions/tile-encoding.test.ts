@@ -26,7 +26,7 @@ describe('encodeTiles', () => {
 
 describe('decodeTiles', () => {
     test('extracts relevant text', () => {
-        expect(decodeTiles('🪲1p')).toEqual([11])
+        expect(decodeTiles('🐛1p')).toEqual([11])
         expect(decodeTiles('/efficiency hand: 4456778899m45p67s')).toEqual([4, 4, 5, 6, 7, 7, 8, 8, 9, 9, 14, 15, 26, 27])
     })
 
