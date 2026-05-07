@@ -40,13 +40,13 @@ export function App() {
 					<div className="grow" />
 					<Controls />
 				</TabPanel>
-				<TabPanel as={DualPanel} expand="below" className="gap-4">
-					<Conditions />
-					<Comparison />
-				</TabPanel>
 				<TabPanel as={DualPanel} expand="above" className="gap-4 overflow-hidden">
 					<DiscardResults hand={hand} />
 					<DiscardInput hand={hand} />
+				</TabPanel>
+				<TabPanel as={DualPanel} expand="below" className="gap-4">
+					<Conditions />
+					<Comparison />
 				</TabPanel>
 			</TabPanels>
 			<TabList as="nav" className="shrink-0 bg-mangan text-sm p-1 pr-inset-1 pb-inset-1 gap-2 flex justify-center condensed:flex-col lg:order-first">
@@ -55,12 +55,12 @@ export function App() {
 					<span className="condensed:hidden">Payment</span>
 				</Tab>
 				<Tab className={tabStyle}>
-					<CompassRose {...iconProps} />
-					<span className="condensed:hidden">Compare</span>
-				</Tab>
-				<Tab className={tabStyle}>
 					<SubtractSquare {...iconProps} />
 					<span className="condensed:hidden">Efficiency</span>
+				</Tab>
+				<Tab className={tabStyle}>
+					<CompassRose {...iconProps} />
+					<span className="condensed:hidden">Compare</span>
 				</Tab>
 				<Button className={tabStyle} onClick={() => setIsMenuOpen(true)}>
 					<List {...iconProps} />
