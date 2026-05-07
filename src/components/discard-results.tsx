@@ -43,7 +43,7 @@ export function DiscardResults({ hand }: DiscardResultProps) {
             const result: ResultMode = {
                 mode: '13',
                 shanten,
-                ukeire: ukeireFn(hand, undefined, shanten),
+                ukeire: ukeireFn(hand, shanten),
             }
 
             return result

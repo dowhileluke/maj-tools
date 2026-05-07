@@ -22,13 +22,13 @@ export type AdvancedUke = MultiUke & {
 const THIRTY_EIGHT = generateArray(38)
 
 // hand = 13 tiles
-export function ukeire(hand: number[], wall?: number[], baseline?: number, tiles?: number[]) {
-    if (!wall) {
-        wall = hand.map(n => 4 - n)
-    }
-
+export function ukeire(hand: number[], baseline?: number, wall?: number[], tiles?: number[]) {
     if (typeof baseline === 'undefined') {
         baseline = shanten(hand)
+    }
+
+    if (!wall) {
+        wall = hand.map(n => 4 - n)
     }
 
     // configurable tiles to test
@@ -58,13 +58,13 @@ export function ukeire(hand: number[], wall?: number[], baseline?: number, tiles
 }
 
 // hand = 14 wide
-export function multiUkeire(hand: number[], wall?: number[], baseline?: number, eligibleTiles?: number[]) {
-    if (!wall) {
-        wall = hand.map(n => 4 - n)
-    }
-
+export function multiUkeire(hand: number[], baseline?: number, wall?: number[], eligibleTiles?: number[]) {
     if (typeof baseline === 'undefined') {
         baseline = shanten(hand)
+    }
+
+    if (!wall) {
+        wall = hand.map(n => 4 - n)
     }
 
     const keys: string[] = []
@@ -73,7 +73,7 @@ export function multiUkeire(hand: number[], wall?: number[], baseline?: number, 
     for (const [t, n] of hand.entries()) {
         if (t % 10 === 0 || n < 1) continue
 
-        const { count, tiles } = ukeire(pluckTiles(hand, [t]), wall, baseline, eligibleTiles)
+        const { count, tiles } = ukeire(pluckTiles(hand, [t]), baseline, wall, eligibleTiles)
 
         if (count) {
             const k = tiles.join(',')
@@ -101,7 +101,7 @@ export function advancedUke(hand: number[], wall: number[], uke: MultiUke) {
 
     for (const t of uke.tiles) {
         const tenpaiHand = putTiles(baseHand, [t])
-        const tenpaiForms = multiUkeire(tenpaiHand, wall, 0, uke.tiles)
+        const tenpaiForms = multiUkeire(tenpaiHand, 0, wall, uke.tiles)
 
         if (tenpaiForms.some(f => f.count > 4)) {
             goodCount += wall[t]
@@ -128,7 +128,7 @@ export function groupedUke(hand: number[], baseline?: number) {
     }
 
     const wall = hand.map(n => 4 - n)
-    const ukeList = multiUkeire(hand, wall, baseline)
+    const ukeList = multiUkeire(hand, baseline, wall)
 
     // not iishanten
     if (baseline !== 1) return ukeList
