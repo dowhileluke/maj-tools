@@ -1,5 +1,6 @@
 import { ComponentPropsWithRef } from 'react'
 import { concat } from '../functions/concat';
+import { generateArray } from '@dowhileluke/fns';
 
 export type TileSize = 'sm' | 'md'
 
@@ -8,7 +9,18 @@ type TileProps = {
     size?: TileSize;
 }
 
-const baseStyle = 'shrink-0 font-bold border rounded-sm active:opacity-80 disabled:opacity-40'
+const suits = 'mpsz'.split('')
+const names = generateArray(38, t => {
+    const n = t % 10
+
+    if (!n) return ''
+
+    const s = Math.floor(t / 10)
+
+    return `${n}${suits[s]}`
+})
+
+const baseStyle = 'shrink-0 p-[2px] text-neutral-800 font-bold border rounded-sm active:opacity-80 disabled:opacity-40'
 const emptyStyle = concat(baseStyle, 'border-dashed border-fore')
 const primaryStyle = concat(baseStyle, 'flex-center bg-white border-neutral-800')
 
@@ -16,15 +28,6 @@ const sizeMap: Record<TileSize, string> = {
     sm: 'w-5 h-6',
     md: 'text-xl w-8 h-10',
 }
-
-const baseColor = ['text-red-700', 'text-blue-700', 'text-green-700', 'text-neutral-800']
-const dragonColor: Record<number, string> = {
-    35: 'text-white',
-    36: 'text-green-700',
-    37: 'text-red-700',
-}
-
-const honorLabels = '?ESWNHGR'
 
 export function Tile({ t, size = 'md', className, children, ...props }: TileProps & ComponentPropsWithRef<'button'>) {
     const rank = t % 10
@@ -37,12 +40,17 @@ export function Tile({ t, size = 'md', className, children, ...props }: TileProp
         )
     }
 
-    const label = children || (t > 30 ? honorLabels.charAt(rank) : rank)
-    const color = dragonColor[t] || baseColor[Math.floor(t / 10)]
+    const name = names[t]
+    const label = children || (
+        <img
+            src={`./tiles/${name}.svg`}
+            alt={name}
+        />
+    )
     const cursor = props.onClick && !props.disabled && 'cursor-pointer'
 
     return (
-        <button className={concat(primaryStyle, sizeMap[size], color, className, cursor)} {...props}>
+        <button className={concat(primaryStyle, sizeMap[size], !name && 'bg-yellow-500', className, cursor)} {...props}>
             {label}
         </button>
     )

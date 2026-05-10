@@ -11,7 +11,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       // devOptions: { enabled: true },
-      includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png', 'qr.png', 'kofi.png'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png', 'qr.png', 'kofi.png', 'tiles/*.svg'],
       manifest: {
         name: 'MajTools',
         short_name: 'MajTools',

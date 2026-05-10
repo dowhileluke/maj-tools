@@ -18,13 +18,18 @@ const justifyStyle: Record<Justify, string> = {
     end: 'justify-end',
 }
 
-export function TileList({ tiles, size, wrap, justify = 'center', onClick, isDisabled }: TileListProps) {
+const gapSize: Record<TileSize, string> = {
+    'sm': 'gap-0.5',
+    'md': 'gap-1',
+}
+
+export function TileList({ tiles, size = 'md', wrap, justify = 'center', onClick, isDisabled }: TileListProps) {
     function getHandler(t: number) {
         if (onClick) return () => onClick(t)
     }
 
     return (
-        <div className={concat('flex gap-1', wrap && 'flex-wrap', justifyStyle[justify])}>
+        <div className={concat('flex', gapSize[size], wrap && 'flex-wrap', justifyStyle[justify])}>
             {tiles.map((t, i) => (
                 <Tile
                     key={i}
