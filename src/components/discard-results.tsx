@@ -1,33 +1,23 @@
-import { Fragment, useMemo } from 'react'
+import { useMemo } from 'react'
 import { shanten as shantenFn } from '../functions/shanten'
 import { useAppState } from '../hooks/use-app-state'
-import { AdvancedUke, groupedUke, MultiUke, ukeire as ukeireFn, Ukeire } from '../functions/ukeire'
-import { TileList } from './tile-list'
-import { DiscardHeader, DiscardLabel } from './discard-label'
+import { AdvancedUke, groupedUke, MultiUke, ukeire as ukeireFn } from '../functions/ukeire'
+import { DiscardTiles, ResultMode } from './discard-tiles'
+import { concat } from '../functions/concat'
 
 type DiscardResultProps = {
     hand: number[];
 }
 
-// 13 tiles at tenpai: show the wait
-// 13 tiles otherwise: show the ukeire
-// 14 tiles winning???
-// 14 tiles at iishanten: show advanced ukeire
-// 14 tiles otherwise: show uke groups
-
-type ResultMode = 
-    | { mode: '13',   shanten: number, ukeire: Ukeire, }
-    | { mode: '14@1', shanten: number, ukeire: AdvancedUke[], }
-    | { mode: '14',   shanten: number, ukeire: MultiUke[], }
-
 function sorted<T extends MultiUke>(list: T[]) {
     return list.sort((a, b) => b.count - a.count)
 }
 
-function ensure(tiles: number[]) {
-    if (tiles.length < 1) return [0]
+function named(shanten: number) {
+    if (shanten === -1) return 'Complete'
+    if (shanten === 0) return 'Tenpai'
 
-    return tiles
+    return `${shanten}-shanten`
 }
 
 export function DiscardResults({ hand }: DiscardResultProps) {
@@ -76,66 +66,23 @@ export function DiscardResults({ hand }: DiscardResultProps) {
         )
     }
 
-    const heading = results.shanten === 0 ? 'Winning Tiles' : 'Accepted Tiles'
-
-    if (results.mode === '13') {
-        return (
-            <DiscardLabel className="size-full overflow-hidden" shanten={results.shanten}>
-                <div className="flex flex-col gap-1">
-                    <DiscardHeader>{heading}</DiscardHeader>
-                    <TileList size="sm" wrap tiles={results.ukeire.tiles} />
-                </div>
-            </DiscardLabel>
-        )
-    }
-
-    if (results.shanten === -1) {
-        return (
-            <DiscardLabel shanten={-1} />
-        )
-    }
+    const isComplete = results.shanten < 0
 
     return (
-        <div className="grid justify-center items-center overflow-hidden">
-            <DiscardLabel className="size-full overflow-hidden" shanten={results.shanten}>
-                <div className="size-full overflow-auto touch-pan-xy">
-                    <div className="grid grid-cols-[auto_auto_1fr] gap-x-4 gap-y-1 ">
-                        <DiscardHeader>Discard</DiscardHeader>
-                        <DiscardHeader className="col-span-2">
-                            {heading}
-                        </DiscardHeader>
-                        {results.ukeire.map(({ discards, count, tiles }, i) => (
-                            <Fragment key={discards[0]}>
-                                <TileList size="sm" tiles={discards} />
-                                <div className="flex-center whitespace-nowrap">
-                                    {count}
-                                    {results.mode === '14@1' && (
-                                        ' (' + results.ukeire[i].goodCount + ')'
-                                    )}
-                                </div>
-                                {results.mode === '14@1' ? (
-                                    <div className="flex items-center gap-1">
-                                        <TileList
-                                            size="sm"
-                                            tiles={ensure(results.ukeire[i].goodTiles)}
-                                        />
-                                        <span>&middot;</span>
-                                        <TileList
-                                            size="sm"
-                                            tiles={ensure(results.ukeire[i].remaining)}
-                                        />
-                                    </div>
-                                ) : (
-                                    <TileList
-                                        size="sm"
-                                        tiles={tiles}
-                                    />
-                                )}
-                            </Fragment>
-                        ))}
+        <div className="flex-center flex-col gap-4 size-full overflow-hidden">
+            <h3 className={concat("grow flex text-center font-bold", isComplete ? 'items-center' : 'items-end')}>
+                {named(results.shanten)}
+            </h3>
+            {!isComplete && (
+                <>
+                    <div className="grid justify-center items-center overflow-hidden">
+                        <div className="size-full overflow-auto touch-pan-xy">
+                            <DiscardTiles results={results} />
+                        </div>
                     </div>
-                </div>
-            </DiscardLabel>
+                    <div className="grow" />
+                </>
+            )}
         </div>
     )
 }

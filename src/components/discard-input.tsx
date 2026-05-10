@@ -93,7 +93,7 @@ export function DiscardInput({ hand }: DiscardInputProps) {
                     {encoded && (<div className="flex-center">
                         <code className={buttonStyle}>{encoded}</code>
                         <Button className={buttonStyle} onClick={() => copyText(encoded)}>
-                            <ClipboardText size="1em" />
+                            <ClipboardText weight="fill" size="1em" />
                         </Button>
                     </div>)}
                     <input
@@ -106,7 +106,7 @@ export function DiscardInput({ hand }: DiscardInputProps) {
                         <Button className={buttonStyle} onClick={() => actions.setIsResetting(false)}>
                             Cancel
                         </Button>
-                        <Button type="submit" className={''}>
+                        <Button type="submit" className="rounded-lg px-2 py-1 gap-1 bg-fore text-back">
                             Confirm
                         </Button>
                     </div>

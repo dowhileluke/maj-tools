@@ -146,7 +146,5 @@ function extractPartial(state: ShantenState) {
         }
     }
 
-    let s = calc(state)
-
-    return Math.min(best, s)
+    return Math.min(best, calc(state))
 }
