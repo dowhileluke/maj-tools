@@ -52,3 +52,5 @@ for (const { han, hanLabel, baseValue } of LIMIT_HANDS) {
 		BASE_VALUE_POINTS[baseValue] = toPointCalculation(baseValue)
 	}
 }
+
+export const EMPTY_HAND = generateArray(38).fill(0)

@@ -56,6 +56,7 @@ export type AppState = ScoreState & {
 	isLightMode: boolean;
 	isMenuOpen: boolean;
 	isResetting: boolean;
+	tiles: number[];
 }
 
 export type AppActions = {
@@ -71,4 +72,7 @@ export type AppActions = {
 	setIsResetting: (isResetting: boolean) => void;
 	resetComparison: (score: Score) => void;
 	setIsSimpleFu: (isSimpleFu: boolean) => void;
+	addTile: (n: number) => void;
+	removeTile: (n: number) => void;
+	setTiles: (s: string) => void;
 }

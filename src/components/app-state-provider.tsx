@@ -4,6 +4,7 @@ import { AppActions, AppState } from '../types'
 import { AppContext } from '../context'
 import { BG_HEX_CODE } from '../const'
 import { getPersistedState, setPersistedState } from '../functions/persist'
+import { decodeTiles } from '../functions/tile-encoding'
 
 const initialState: AppState = {
 	isDealer: false,
@@ -16,7 +17,16 @@ const initialState: AppState = {
 	repeatCount: 0,
 	leftoverCount: 0,
 	isSimpleFu: false,
+	tiles: [],
 	...getPersistedState(),
+}
+
+function removeAtIndex<T>(list: T[], index: number) {
+	if (index < 0) {
+		return list.slice(0, -1)
+	}
+
+	return list.filter((_, i) => i !== index)
 }
 
 function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
@@ -72,6 +82,18 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 		setIsSimpleFu(isSimpleFu) {
 			setState(prev => ({ ...prev, isSimpleFu, }))
 		},
+		addTile(n) {
+			setState(prev => ({ ...prev, tiles: prev.tiles.concat(n), }))
+		},
+		removeTile(n) {
+			setState(prev => ({
+				...prev,
+				tiles: removeAtIndex(prev.tiles, prev.tiles.indexOf(n)),
+			}))
+		},
+		setTiles(s) {
+			setState(prev => ({ ...prev, isResetting: false, tiles: decodeTiles(s), }))
+		},
 	}
 
 	return result
@@ -80,7 +102,7 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 export function AppStateProvider({ children }: PropsWithChildren) {
 	const [state, setState] = useState(initialState)
 	const [actions] = useState(() => bindActions(setState))
-	const { isLightMode, scores } = state
+	const { isLightMode, scores, dealerIndex, tiles } = state
 
 	useEffect(() => {
 		document.documentElement.classList.toggle('light', isLightMode)
@@ -88,8 +110,8 @@ export function AppStateProvider({ children }: PropsWithChildren) {
 	
 
 	useEffect(() => {
-		setPersistedState({ isLightMode, scores })
-	}, [isLightMode, scores])
+		setPersistedState({ isLightMode, scores, dealerIndex, tiles })
+	}, [isLightMode, scores, dealerIndex, tiles])
 
 	return (
 		<AppContext value={[state, actions]}>
