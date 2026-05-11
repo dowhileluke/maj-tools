@@ -37,15 +37,20 @@ export function DiscardTiles({ results }: DiscardTileProps) {
 
     if (results.mode === '13') {
         return (
-            <div className="flex flex-col gap-1">
-                <DiscardHeader>{heading}</DiscardHeader>
+            <div className="grid grid-cols-[auto_auto] gap-x-4 gap-y-1">
+                <DiscardHeader className="col-span-2">
+                    {heading}
+                </DiscardHeader>
+                <div className="flex items-center">
+                    {results.ukeire.count}x
+                </div>
                 <TileList size="sm" wrap tiles={results.ukeire.tiles} />
             </div>
         )
     }
 
     return (
-        <div className="grid grid-cols-[auto_auto_auto] gap-x-4 gap-y-1 ">
+        <div className="grid grid-cols-[auto_auto_auto] gap-x-4 gap-y-1">
             <DiscardHeader>Drop</DiscardHeader>
             <DiscardHeader className="col-span-2">
                 {heading}
