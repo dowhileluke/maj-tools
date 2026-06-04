@@ -13,8 +13,6 @@ test('overtake three-way tie', () => {
 	const scores = [0, 11_000, 11_000, 11_000]
 	const conditions = toConditions({ scores, dealerIndex: 0, })
 
-	console.log(conditions)
-
 	// 2nd place is impossible; any ron will take 3rd
 	expect(conditions[1]).toBeNull()
 	expect(conditions[2]?.simpleRon).not.toBeNull()
