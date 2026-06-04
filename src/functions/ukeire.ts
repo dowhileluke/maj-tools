@@ -101,10 +101,7 @@ export function advancedUke(hand: number[], wall: number[], uke: MultiUke) {
 
     for (const t of uke.tiles) {
         const tenpaiHand = putTiles(baseHand, [t])
-        const tenpaiWall = wall.slice()
-
-        tenpaiWall[t] -= 1
-
+        const tenpaiWall = pluckTiles(wall, [t])
         const tenpaiForms = multiUkeire(tenpaiHand, 0, tenpaiWall, uke.tiles)
 
         if (tenpaiForms.some(f => f.count > 4)) {
