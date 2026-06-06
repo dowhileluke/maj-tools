@@ -72,7 +72,7 @@ export type AppActions = {
 	setIsResetting: (isResetting: boolean) => void;
 	resetComparison: (score: Score) => void;
 	setIsSimpleFu: (isSimpleFu: boolean) => void;
-	addTile: (n: number) => void;
-	removeTile: (n: number) => void;
+	addTile: (t: number) => void;
+	removeTile: (t: number) => void;
 	setTiles: (s: string) => void;
 }

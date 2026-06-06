@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import { AdvancedUke, MultiUke, Ukeire } from '../functions/ukeire'
 import { DiscardHeader } from './discard-header'
 import { TileList } from './tile-list'
+import { useAppState } from '../hooks/use-app-state'
 
 // 13 tiles at tenpai: show the wait
 // 13 tiles otherwise: show the ukeire
@@ -33,6 +34,7 @@ function goodCount(uke: AdvancedUke) {
 }
 
 export function DiscardTiles({ results }: DiscardTileProps) {
+    const [, actions] = useAppState()
     const heading = results.shanten === 0 ? 'Winning Tiles' : 'Accepted Tiles'
 
     if (results.mode === '13') {
@@ -44,9 +46,19 @@ export function DiscardTiles({ results }: DiscardTileProps) {
                 <div className="flex items-center">
                     {results.ukeire.count}x
                 </div>
-                <TileList size="sm" wrap tiles={results.ukeire.tiles} />
+                <TileList
+                    size="sm"
+                    wrap
+                    tiles={results.ukeire.tiles}
+                    onClick={actions.addTile}
+                />
             </div>
         )
+    }
+
+    function goNext(d: number, t: number) {
+        actions.removeTile(d)
+        actions.addTile(t)
     }
 
     return (
@@ -57,7 +69,7 @@ export function DiscardTiles({ results }: DiscardTileProps) {
             </DiscardHeader>
             {results.ukeire.map(({ discards, count, tiles }, i) => (
                 <Fragment key={discards[0]}>
-                    <TileList size="sm" tiles={discards} />
+                    <TileList size="sm" tiles={discards} onClick={actions.removeTile} />
                     <div className="flex items-center gap-1 whitespace-nowrap">
                         {count}x
                         {results.mode === '14@1' && goodCount(results.ukeire[i])}
@@ -67,11 +79,13 @@ export function DiscardTiles({ results }: DiscardTileProps) {
                             <TileList
                                 size="sm"
                                 tiles={ensure(results.ukeire[i].goodTiles)}
+                                onClick={t => goNext(discards[0], t)}
                             />
                             <span>&middot;</span>
                             <TileList
                                 size="sm"
                                 tiles={ensure(results.ukeire[i].remaining)}
+                                onClick={t => goNext(discards[0], t)}
                             />
                         </div>
                     ) : (
@@ -79,6 +93,7 @@ export function DiscardTiles({ results }: DiscardTileProps) {
                             size="sm"
                             tiles={tiles}
                             justify="start"
+                            onClick={t => goNext(discards[0], t)}
                         />
                     )}
                 </Fragment>

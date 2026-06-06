@@ -82,13 +82,13 @@ function bindActions(setState: Dispatch<SetStateAction<AppState>>) {
 		setIsSimpleFu(isSimpleFu) {
 			setState(prev => ({ ...prev, isSimpleFu, }))
 		},
-		addTile(n) {
-			setState(prev => ({ ...prev, tiles: prev.tiles.concat(n), }))
+		addTile(t) {
+			setState(prev => ({ ...prev, tiles: prev.tiles.concat(t), }))
 		},
-		removeTile(n) {
+		removeTile(t) {
 			setState(prev => ({
 				...prev,
-				tiles: removeAtIndex(prev.tiles, prev.tiles.indexOf(n)),
+				tiles: removeAtIndex(prev.tiles, prev.tiles.indexOf(t)),
 			}))
 		},
 		setTiles(s) {
