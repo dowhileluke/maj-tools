@@ -24,14 +24,22 @@ describe('encodeTiles', () => {
     })
 })
 
+// Don @ 2026-08-16
+const msg = `11z88s3345556667p
+Last by 10k
+S1 dealer
+T7-9ish`
+
+const msgTiles = [31, 31, 28, 28, 13, 13, 14, 15, 15, 15, 16, 16, 16, 17]
+
 describe('decodeTiles', () => {
     test('extracts relevant text', () => {
         expect(decodeTiles('🐛1p')).toEqual([11])
         expect(decodeTiles('/efficiency hand: 4456778899m45p67s')).toEqual([4, 4, 5, 6, 7, 7, 8, 8, 9, 9, 14, 15, 26, 27])
     })
 
-    test('takes the first 14 tiles (sorted, fifth+ copies pruned)', () => {
-        expect(decodeTiles('11111m22222m33333m8888888m66666666m7777m')).toEqual([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 6, 6])
+    test('takes the first 14 valid tiles (fifth+ copies pruned)', () => {
+        expect(decodeTiles('11111m22222m33333m8888888m66666666m7777m')).toEqual([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 8, 8])
     })
 
     test('understands aka `0` notation', ( )=> {
@@ -39,6 +47,10 @@ describe('decodeTiles', () => {
     })
 
     test('unexpected number treated as jihai', ( )=> {
-        expect(decodeTiles('02')).toEqual([32, 35])
+        expect(decodeTiles('02')).toEqual([35, 32])
+    })
+
+    test('parses multiline message', () => {
+        expect(decodeTiles(msg)).toEqual(msgTiles)
     })
 })

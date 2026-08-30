@@ -53,7 +53,7 @@ function isDigit(ch: string) {
 
 export function decodeTiles(s: string) {
     const parts = s.split('').concat('z')
-    const hand = EMPTY_HAND.slice()
+    const found: number[] = []
     let buffer: number[] = []
 
     for (const ch of parts) {
@@ -64,7 +64,7 @@ export function decodeTiles(s: string) {
                 const t = n + mod
 
                 if (t < 38) {
-                    hand[t]++
+                    found.push(t)
                 }
             }
 
@@ -77,12 +77,18 @@ export function decodeTiles(s: string) {
     }
 
     const result: number[] = []
+    const hand = EMPTY_HAND.slice();
+    let count = 0
 
-    for (const [t, count] of hand.entries()) {
-        for (let i = 0; i < count && i < 4; i++) {
+    for (const t of found) {
+        if (hand[t] < 4) {
             result.push(t)
+            hand[t]++
+            count++
         }
+
+        if (count >= 14) break
     }
 
-    return result.slice(0, 14)
+    return result
 }
